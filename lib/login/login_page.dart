@@ -1,3 +1,4 @@
+import 'package:delivery/utils/my_colors.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -9,24 +10,50 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Delivery App'),
-      ),
-      body: Stack(
-        children: [
-          Container(
-            width: 150,
-            height: 150,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(100)),
-              color: Colors.lime
+      body: Container(
+        width: double.infinity,
+        child: Column(
+          children: [
+            Image.asset(
+              'assets/img/delivery.png',
+              width: 200,
+              height: 200,
             ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 60, left: 60),
-            child: Text('LOGIN'),
-          )
-        ],
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Correo electronico'
+              ),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                  hintText: 'Contraseña'
+              ),
+            ),
+            ElevatedButton(
+                onPressed: () {
+
+                }, child: Text('INGRESAR')
+            ),
+            Row(
+              children: [
+                Text(
+                  '¿No tienes cuenta?',
+                  style: TextStyle(
+                      color: MyColors.primaryColor
+                  ),
+                ),
+                SizedBox(width: 7,),
+                Text(
+                  'Registrate',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: MyColors.primaryColor
+                  ),
+                )
+              ],
+            )
+          ]
+        ),
       )
     );
   }

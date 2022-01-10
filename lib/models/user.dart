@@ -6,34 +6,34 @@ String userToJson(User data) => json.encode(data.toJson());
 
 class User {
   String? id;
-  String name;
-  String lastname;
-  String email;
-  String phone;
+  String? name;
+  String? lastname;
+  String? email;
+  String? phone;
   String? image;
-  String password;
+  String? password;
   String? sessionToken;
 
   User({
     this.id,
-    required this.name,
-    required this.lastname,
-    required this.email,
-    required this.phone,
+    this.name,
+    this.lastname,
+    this.email,
+    this.phone,
     this.image,
-    required this.password,
+    this.password,
     this.sessionToken,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"] ? json["id"] : "",
+    id: json["id"],
     name: json["name"],
     lastname: json["lastname"],
     email: json["email"],
     phone: json["phone"],
-    image: json["image"] ? json["image"] : "",
+    image: json["image"],
     password: json["password"],
-    sessionToken: json["session_token"] ? json["session_token"] : "",
+    sessionToken: json["session_token"],
   );
 
   Map<String, dynamic> toJson() => {

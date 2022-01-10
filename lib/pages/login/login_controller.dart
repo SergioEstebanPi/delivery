@@ -1,6 +1,8 @@
 import 'package:delivery/models/response_api.dart';
+import 'package:delivery/models/user.dart';
 import 'package:delivery/provider/users_provider.dart';
 import 'package:delivery/utils/my_snackbar.dart';
+import 'package:delivery/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 
 class LoginController {
@@ -11,16 +13,23 @@ class LoginController {
   TextEditingController passwordController = new TextEditingController();
 
   UsersProvider usersProvider = UsersProvider();
+  SharedPref _sharedPref = SharedPref();
 
   Future init(BuildContext? context) async {
     this.context = context;
     await usersProvider.init(context);
+
+    User user = User.fromJson(await _sharedPref.read('user') ?? {});
+    print('Usuario ${user.toJson()}');
+    if(user.sessionToken != null && user.sessionToken!.isNotEmpty) {
+      Navigator.pushNamedAndRemoveUntil(context!, 'client/products/list', (route) => false);
+    }
   }
 
   void goToRegisterPage(){
     Navigator.pushNamed(
         context!,
-        'pages.register'
+        'register'
     );
   }
 
@@ -37,8 +46,16 @@ class LoginController {
     }
 
     ResponseApi responseApi = await usersProvider.login(email, password);
-    print(responseApi);
-    MySnackbar.show(context!, responseApi.message);
+    print('Respuesta object: ${responseApi}');
+    print('Respuesta: ${responseApi.toJson()}');
 
+    if(responseApi.success){
+      User user = User.fromJson(responseApi.data);
+      _sharedPref.save('user', user.toJson());
+      Navigator.pushNamedAndRemoveUntil(context!, 'client/products/list', (route) => false);
+    } else {
+      MySnackbar.show(context!, responseApi.message);
+    }
   }
+
 }

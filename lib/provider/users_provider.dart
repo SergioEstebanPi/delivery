@@ -46,7 +46,7 @@ class UsersProvider {
   Future<ResponseApi> login(email, password) async {
     try {
       Uri uri = Uri.http(_url, '$_api/login');
-      String bodyParams = json.encode({email: email, password: password});
+      String bodyParams = json.encode({"email": email, "password": password});
       Map<String, String> headers = {
         'Content-type': 'application/json'
       };

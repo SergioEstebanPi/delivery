@@ -22,11 +22,8 @@ class RegisterController {
     await usersProvider.init(context);
   }
 
-  void goToLoginPage(){
-    Navigator.pushNamed(
-        context!,
-        'pages.login'
-    );
+  void back(){
+    Navigator.pop(context!);
   }
 
   void register() async {

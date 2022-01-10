@@ -18,7 +18,6 @@ class UsersProvider {
   }
 
   Future<ResponseApi> create(User user) async {
-    Map<String, dynamic> res = {};
     try {
       Uri uri = Uri.http(_url, '$_api/register');
       String bodyParams = json.encode(user);

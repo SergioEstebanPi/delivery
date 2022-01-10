@@ -60,7 +60,8 @@ class _LoginPageState extends State<LoginPage> {
         style: TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
-          fontSize: 22
+          fontSize: 22,
+          fontFamily: 'Roboto'
         ),
     );
   }
@@ -105,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       child: TextField(
         decoration: InputDecoration(
-            hintText: 'Correo electronico',
+            hintText: 'Correo electrónico',
             border: InputBorder.none,
             contentPadding: EdgeInsets.all(15),
             hintStyle: TextStyle(

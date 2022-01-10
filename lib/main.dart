@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primaryColor: MyColors.primaryColor,
         primarySwatch: Colors.red,
+        fontFamily: 'NimbusSans'
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
       debugShowCheckedModeBanner: false,

@@ -1,5 +1,5 @@
-import 'package:delivery/login/login_page.dart';
-import 'package:delivery/register/register_page.dart';
+import 'package:delivery/pages/login/login_page.dart';
+import 'package:delivery/pages/register/register_page.dart';
 import 'package:delivery/utils/my_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -15,10 +15,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Delivery',
-      initialRoute: 'login',
+      initialRoute: 'pages.login',
       routes: {
-        'login': (BuildContext context) => LoginPage(),
-        'register': (BuildContext context) => RegisterPage()
+        'pages.login': (BuildContext context) => LoginPage(),
+        'pages.register': (BuildContext context) => RegisterPage()
       },
       theme: ThemeData(
         // This is the theme of your application.

@@ -14,7 +14,7 @@ class LoginController {
   void goToRegisterPage(){
     Navigator.pushNamed(
         context!,
-        'register'
+        'pages.register'
     );
   }
 

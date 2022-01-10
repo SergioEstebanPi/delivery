@@ -1,4 +1,4 @@
-import 'package:delivery/register/register_controller.dart';
+import 'package:delivery/pages/register/register_controller.dart';
 import 'package:delivery/utils/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';

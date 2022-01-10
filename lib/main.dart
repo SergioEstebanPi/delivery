@@ -1,4 +1,5 @@
 import 'package:delivery/login/login_page.dart';
+import 'package:delivery/register/register_page.dart';
 import 'package:delivery/utils/my_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,8 @@ class MyApp extends StatelessWidget {
       title: 'Delivery',
       initialRoute: 'login',
       routes: {
-        'login': (BuildContext context) => LoginPage()
+        'login': (BuildContext context) => LoginPage(),
+        'register': (BuildContext context) => RegisterPage()
       },
       theme: ThemeData(
         // This is the theme of your application.

@@ -75,5 +75,11 @@ class RegisterController {
 
     MySnackbar.show(context!, responseApi.message);
 
+    if(responseApi.success){
+      Future.delayed(const Duration(seconds: 3), () {
+        Navigator.pushReplacementNamed(context!, 'login');
+      });
+    }
+
   }
 }

@@ -14,47 +14,120 @@ class _LoginPageState extends State<LoginPage> {
         width: double.infinity,
         child: Column(
           children: [
-            Image.asset(
-              'assets/img/delivery.png',
-              width: 200,
-              height: 200,
-            ),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Correo electronico'
-              ),
-            ),
-            TextField(
-              decoration: InputDecoration(
-                  hintText: 'Contraseña'
-              ),
-            ),
-            ElevatedButton(
-                onPressed: () {
-
-                }, child: Text('INGRESAR')
-            ),
-            Row(
-              children: [
-                Text(
-                  '¿No tienes cuenta?',
-                  style: TextStyle(
-                      color: MyColors.primaryColor
-                  ),
-                ),
-                SizedBox(width: 7,),
-                Text(
-                  'Registrate',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: MyColors.primaryColor
-                  ),
-                )
-              ],
-            )
+            _imageBanner(),
+            _textFieldEmail(),
+            _textFieldPassword(),
+            _buttonLogin(),
+            _textDontHaveAccount(),
           ]
         ),
       )
+    );
+  }
+
+  Widget _imageBanner(){
+    return Container(
+      margin: EdgeInsets.only(
+          top: 100,
+          bottom: 7// MediaQuery.of(context).size.height * 0.22
+      ),
+      child: Image.asset(
+        'assets/img/delivery.png',
+        width: 200,
+        height: 200,
+      ),
+    );
+  }
+
+  Widget _textFieldEmail(){
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 50, vertical: 5),
+      decoration: BoxDecoration(
+          color: MyColors.primaryOpacityColor,
+          borderRadius: BorderRadius.circular(30)
+      ),
+      child: TextField(
+        decoration: InputDecoration(
+            hintText: 'Correo electronico',
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.all(15),
+            hintStyle: TextStyle(
+                color: MyColors.primaryColorDark
+            ),
+            prefixIcon: Icon(
+                Icons.email,
+                color: MyColors.primaryColor
+            )
+        ),
+      ),
+    );
+  }
+
+  Widget _textFieldPassword(){
+    return  Container(
+      margin: EdgeInsets.symmetric(horizontal: 50, vertical: 5),
+      decoration: BoxDecoration(
+          color: MyColors.primaryOpacityColor,
+          borderRadius: BorderRadius.circular(30)
+      ),
+      child: TextField(
+        decoration: InputDecoration(
+            hintText: 'Contraseña',
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.all(15),
+            hintStyle: TextStyle(
+                color: MyColors.primaryColorDark
+            ),
+            prefixIcon: Icon(
+                Icons.lock,
+                color: MyColors.primaryColor
+            )
+        ),
+      ),
+    );
+  }
+
+  Widget _textDontHaveAccount(){
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            '¿No tienes cuenta?',
+            style: TextStyle(
+                color: MyColors.primaryColor
+            ),
+          ),
+          SizedBox(width: 7,),
+          Text(
+            'Registrate',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: MyColors.primaryColor
+            ),
+          )
+        ],
+      );
+  }
+
+  Widget _buttonLogin(){
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(
+        horizontal: 50,
+        vertical: 30
+      ),
+      child: ElevatedButton(
+          onPressed: () {
+
+          }, child: Text('INGRESAR'),
+          style: ElevatedButton.styleFrom(
+            primary: MyColors.primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30)
+            ),
+            padding: EdgeInsets.symmetric(vertical: 25)
+          ),
+      ),
     );
   }
 }

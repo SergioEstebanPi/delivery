@@ -175,6 +175,7 @@ class _RegisterPageState extends State<RegisterPage> {
           borderRadius: BorderRadius.circular(30)
       ),
       child: TextField(
+        keyboardType: TextInputType.emailAddress,
         controller: _con.emailController,
         decoration: InputDecoration(
             hintText: 'Correo electrónico',

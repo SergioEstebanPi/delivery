@@ -19,7 +19,7 @@ class RegisterController {
 
   Future init(BuildContext? context) async {
     this.context = context;
-    usersProvider.init(context);
+    await usersProvider.init(context);
   }
 
   void goToLoginPage(){

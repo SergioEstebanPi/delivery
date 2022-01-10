@@ -1,5 +1,6 @@
 import 'package:delivery/utils/my_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -24,14 +25,17 @@ class _LoginPageState extends State<LoginPage> {
                 top: 60,
                 left: 25,
             ),
-            Column(
-              children: [
-                _imageBanner(),
-                _textFieldEmail(),
-                _textFieldPassword(),
-                _buttonLogin(),
-                _textDontHaveAccount(),
-              ]
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  _lottieAnimation(),
+                  // _imageBanner(),
+                  _textFieldEmail(),
+                  _textFieldPassword(),
+                  _buttonLogin(),
+                  _textDontHaveAccount(),
+                ]
+              ),
             )
           ]
         ),
@@ -61,6 +65,22 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Widget _lottieAnimation(){
+    return Container(
+      margin: EdgeInsets.only(
+        top: 150,
+        bottom: MediaQuery.of(context).size.height *0.01
+      ),
+      child: Lottie.asset(
+        'assets/json/delivery.json',
+        width: 350,
+        height: 200,
+        fit: BoxFit.fill
+      ),
+    );
+  }
+
+  /*
   Widget _imageBanner(){
     return Container(
       margin: EdgeInsets.only(
@@ -74,6 +94,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+  */
 
   Widget _textFieldEmail(){
     return Container(
@@ -161,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30)
             ),
-            padding: EdgeInsets.symmetric(vertical: 25)
+            padding: EdgeInsets.symmetric(vertical: 15)
           ),
       ),
     );

@@ -21,8 +21,13 @@ class LoginController {
 
     User user = User.fromJson(await _sharedPref.read('user') ?? {});
     print('Usuario ${user.toJson()}');
-    if(user.sessionToken != null && user.sessionToken!.isNotEmpty) {
-      Navigator.pushNamedAndRemoveUntil(context!, 'client/products/list', (route) => false);
+    if(user.roles != null){
+      if(user.roles!.length > 1) {
+        Navigator.pushNamedAndRemoveUntil(context!, 'roles', (route) => false);
+      } else {
+        String? route = user.roles![0].route;
+        Navigator.pushNamedAndRemoveUntil(context!, route!, (route) => false);
+      }
     }
   }
 
@@ -52,7 +57,16 @@ class LoginController {
     if(responseApi.success){
       User user = User.fromJson(responseApi.data);
       _sharedPref.save('user', user.toJson());
-      Navigator.pushNamedAndRemoveUntil(context!, 'client/products/list', (route) => false);
+
+      print('Usuario logeado ${user.toJson()}');
+      if(user.roles != null){
+        if(user.roles!.length > 1) {
+          Navigator.pushNamedAndRemoveUntil(context!, 'roles', (route) => false);
+        } else {
+          String? route = user.roles![0].route;
+          Navigator.pushNamedAndRemoveUntil(context!, route!, (route) => false);
+        }
+      }
     } else {
       MySnackbar.show(context!, responseApi.message);
     }

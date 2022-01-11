@@ -17,7 +17,7 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
     // TODO: implement initState
     super.initState();
     SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
-      _con.init(context);
+      _con.init(context, refresh);
     });
   }
 
@@ -54,6 +54,13 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
   }
 
   Widget _drawer(){
+    var userImage;
+    if(_con.user?.image != null){
+      userImage = NetworkImage(_con.user!.image!);
+    } else {
+      userImage = AssetImage('assets/img/no-image.png');
+    }
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -66,7 +73,7 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                   Text(
-                    'Nombre de usuario',
+                    '${_con.user?.name ?? ''} ${_con.user?.lastname ?? ''}',
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.white,
@@ -75,7 +82,7 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
                     maxLines: 1,
                   ),
                   Text(
-                    'email',
+                    '${_con.user?.email ?? ''}',
                     style: TextStyle(
                         fontSize: 13,
                         color: Colors.grey[200],
@@ -85,7 +92,7 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
                     maxLines: 1,
                   ),
                   Text(
-                    'telefono',
+                    '${_con.user?.phone ?? ''}',
                     style: TextStyle(
                         fontSize: 13,
                         color: Colors.grey[200],
@@ -97,10 +104,8 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
                   Container(
                     height: 60,
                     margin: EdgeInsets.only(top: 10),
-                    child: const FadeInImage(
-                      image: AssetImage(
-                          'assets/img/no-image.png'
-                      ),
+                    child: FadeInImage(
+                      image: userImage,
                       fit: BoxFit.contain,
                       fadeInDuration: Duration(milliseconds: 50),
                       placeholder: AssetImage('assets/img/no-image.png'),
@@ -117,10 +122,14 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
             title: Text('Mis pedidos'),
             trailing: Icon(Icons.shopping_cart_outlined),
           ),
-          ListTile(
-            title: Text('Seleccionar rol'),
-            trailing: Icon(Icons.person_outlined),
-          ),
+          _con.user != null ?
+              _con.user!.roles!.length > 1 ?
+                ListTile(
+                  onTap: _con.goToRoles,
+                  title: Text('Seleccionar rol'),
+                  trailing: Icon(Icons.person_outlined),
+                ): Container()
+                  : Container(),
           ListTile(
             onTap: () {
               _con.logout();
@@ -131,5 +140,10 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
         ],
       ),
     );
+  }
+
+  void refresh(){
+    setState(() {
+    });
   }
 }

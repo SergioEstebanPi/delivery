@@ -1,3 +1,4 @@
+import 'package:delivery/models/user.dart';
 import 'package:flutter/material.dart';
 
 import 'package:delivery/utils/my_snackbar.dart';
@@ -9,9 +10,14 @@ class RestaurantOrdersListController {
   BuildContext? context;
   SharedPref _sharedPref = SharedPref();
   GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
+  User? user;
+  Function? refresh;
 
-  Future init(BuildContext context) async {
+  Future init(BuildContext context, Function refresh) async {
     this.context = context;
+    this.refresh = refresh;
+    user = User.fromJson(await _sharedPref.read('user'));
+    refresh();
   }
 
   void logout(){
@@ -21,6 +27,10 @@ class RestaurantOrdersListController {
 
   void openDrawer(){
     key.currentState!.openDrawer();
+  }
+
+  void goToRoles(){
+    Navigator.pushNamedAndRemoveUntil(context!, 'roles', (route) => false);
   }
 
 }

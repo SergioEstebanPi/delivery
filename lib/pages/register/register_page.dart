@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:delivery/pages/register/register_controller.dart';
 import 'package:delivery/utils/my_colors.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +22,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
     SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
       print('Scheduler binding');
-      _con.init(context);
+      _con.init(context, refresh);
     });
   }
 
@@ -108,12 +110,21 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _imageUser(){
-    return CircleAvatar(
-      backgroundImage: AssetImage(
-        'assets/img/user_profile_2.png'
+    return GestureDetector(
+      onTap:_con.showAlertDialog,
+      child: CircleAvatar(
+        backgroundColor: Colors.grey,
+        radius: 70,
+        child: CircleAvatar(
+          radius: 68,
+          child: ClipOval(
+            child: (_con.imageFile != null)
+              ? Image.file(_con.imageFile!)
+                : Image.asset('assets/img/user_profile_2.png')
+          ),
+        backgroundColor: Colors.grey[200],
+        )
       ),
-      radius: 60,
-      backgroundColor: Colors.grey[200],
     );
   }
 
@@ -295,5 +306,10 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
+  }
+
+  void refresh() {
+    setState(() {
+    });
   }
 }

@@ -192,7 +192,7 @@ class _ClientUpdatePageState extends State<ClientUpdatePage> {
       child: ElevatedButton(
         onPressed: () {
           _con.isEnable ?
-          _con.register() : null;
+          _con.update() : null;
         }, child: Text('ACTUALIZAR PERFIL'),
         style: ElevatedButton.styleFrom(
             primary: MyColors.primaryColor,

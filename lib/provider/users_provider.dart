@@ -48,6 +48,35 @@ class UsersProvider {
     }
   }
 
+  Future<Stream?> update(User user, File image) async {
+    try {
+      Uri uri = Uri.http(_url, '$_api/update');
+      final request = http.MultipartRequest("PUT", uri);
+
+      if(image != null) {
+        request.files.add(http.MultipartFile(
+            'image',
+            http.ByteStream(image.openRead().cast()),
+            await image.length(),
+            filename: basename(image.path)
+        ));
+      }
+
+      request.fields['user'] = json.encode(user);
+      final response = await request.send();
+      return response.stream.transform(utf8.decoder);
+    } catch(e){
+      Map<String, dynamic> res = {
+        "message": "",
+        "error": "Error ${e}",
+        "success": false,
+        "data": null,
+      };
+      ResponseApi responseApi = ResponseApi.fromJson(res);
+      return null;
+    }
+  }
+
   Future<ResponseApi> create(User user) async {
     try {
       Uri uri = Uri.http(_url, '$_api/register');

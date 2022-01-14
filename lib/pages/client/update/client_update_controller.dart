@@ -7,6 +7,7 @@ import 'package:delivery/provider/users_provider.dart';
 import 'package:delivery/utils/my_snackbar.dart';
 import 'package:delivery/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sn_progress_dialog/progress_dialog.dart';
 
@@ -63,7 +64,7 @@ class ClientUpdateController {
     );
 
     AlertDialog alertDialog = AlertDialog(
-      title: Text('Selecciona tu image'),
+      title: Text('Selecciona tu imagen'),
       actions: [
         galleryButton,
         cameraButton
@@ -82,7 +83,7 @@ class ClientUpdateController {
     Navigator.pop(context!);
   }
 
-  void register() async {
+  void update() async {
     String name = nameController.text;
     String lastName = lastNameController.text;
     String phone = phoneController.text.trim();
@@ -107,13 +108,15 @@ class ClientUpdateController {
     _progressDialog!.show(max: 100, msg: 'Cargando...');
     isEnable = false;
 
-    User user = User(
+    User myUser = User(
+        id: user!.id,
         name: name,
         lastname: lastName,
         phone: phone,
+        image: user!.image
     );
 
-    Stream? stream = await usersProvider.createWithImage(user, imageFile!);
+    Stream? stream = await usersProvider.update(myUser, imageFile!);
     stream!.listen((res) {
 
       _progressDialog!.close();
@@ -123,12 +126,10 @@ class ClientUpdateController {
 
       print("Respuesta registro: ${responseApi.toJson()}");
 
-      MySnackbar.show(context!, responseApi.message);
+      Fluttertoast.showToast(msg: responseApi.message);
 
       if(responseApi.success){
-        Future.delayed(const Duration(seconds: 3), () {
-          Navigator.pushReplacementNamed(context!, 'login');
-        });
+        Navigator.pushNamedAndRemoveUntil(context!, 'client/products/list', (route) => false);
       } else {
         isEnable = true;
       }

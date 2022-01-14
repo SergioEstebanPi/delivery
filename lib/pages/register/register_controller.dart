@@ -58,7 +58,7 @@ class RegisterController {
     );
 
     AlertDialog alertDialog = AlertDialog(
-      title: Text('Selecciona tu image'),
+      title: Text('Selecciona tu imagen'),
       actions: [
         galleryButton,
         cameraButton

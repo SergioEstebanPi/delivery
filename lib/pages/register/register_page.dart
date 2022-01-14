@@ -295,7 +295,8 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
       child: ElevatedButton(
         onPressed: () {
-          _con.register();
+          _con.isEnable ?
+          _con.register() : null;
         }, child: Text('REGISTRAR'),
         style: ElevatedButton.styleFrom(
             primary: MyColors.primaryColor,

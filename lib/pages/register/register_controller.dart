@@ -7,6 +7,7 @@ import 'package:delivery/provider/users_provider.dart';
 import 'package:delivery/utils/my_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sn_progress_dialog/progress_dialog.dart';
 
 class RegisterController {
 
@@ -23,11 +24,14 @@ class RegisterController {
   PickedFile? pickedFile;
   File? imageFile;
   Function? refresh;
+  ProgressDialog? _progressDialog;
+  bool isEnable = true;
 
   Future init(BuildContext? context, Function refresh) async {
     this.context = context;
-    await usersProvider.init(context);
     this.refresh = refresh;
+    await usersProvider.init(context);
+    _progressDialog = ProgressDialog(context: context);
   }
 
   Future selectImage(ImageSource imageSource) async{
@@ -114,6 +118,9 @@ class RegisterController {
       return;
     }
 
+    _progressDialog!.show(max: 100, msg: 'Cargando...');
+    isEnable = false;
+
     User user = User(
       email: email,
       name: name,
@@ -124,6 +131,9 @@ class RegisterController {
 
     Stream? stream = await usersProvider.createWithImage(user, imageFile!);
     stream!.listen((res) {
+
+      _progressDialog!.close();
+
       //ResponseApi responseApi = await usersProvider.create(user);
       ResponseApi responseApi = ResponseApi.fromJson(json.decode(res));
 
@@ -135,6 +145,8 @@ class RegisterController {
         Future.delayed(const Duration(seconds: 3), () {
           Navigator.pushReplacementNamed(context!, 'login');
         });
+      } else {
+        isEnable = true;
       }
 
       print('RESPUESTA: ${responseApi.toJson()}');

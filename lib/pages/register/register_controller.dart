@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:delivery/models/response_api.dart';
@@ -108,6 +109,11 @@ class RegisterController {
       return;
     }
 
+    if(imageFile == null){
+      MySnackbar.show(context!, 'Selecciona una imagen');
+      return;
+    }
+
     User user = User(
       email: email,
       name: name,
@@ -116,16 +122,24 @@ class RegisterController {
       password: password
     );
 
-    ResponseApi responseApi = await usersProvider.create(user);
-    print("Respuesta registro: ${responseApi.toJson()}");
+    Stream? stream = await usersProvider.createWithImage(user, imageFile!);
+    stream!.listen((res) {
+      //ResponseApi responseApi = await usersProvider.create(user);
+      ResponseApi responseApi = ResponseApi.fromJson(json.decode(res));
 
-    MySnackbar.show(context!, responseApi.message);
+      print("Respuesta registro: ${responseApi.toJson()}");
 
-    if(responseApi.success){
-      Future.delayed(const Duration(seconds: 3), () {
-        Navigator.pushReplacementNamed(context!, 'login');
-      });
-    }
+      MySnackbar.show(context!, responseApi.message);
+
+      if(responseApi.success){
+        Future.delayed(const Duration(seconds: 3), () {
+          Navigator.pushReplacementNamed(context!, 'login');
+        });
+      }
+
+      print('RESPUESTA: ${responseApi.toJson()}');
+
+    });
 
   }
 }

@@ -1,4 +1,5 @@
 import 'package:delivery/pages/client/products/list/client_products_list_page.dart';
+import 'package:delivery/pages/client/update/client_update_page.dart';
 import 'package:delivery/pages/delivery/orders/list/delivery_orders_list_page.dart';
 import 'package:delivery/pages/login/login_page.dart';
 import 'package:delivery/pages/register/register_page.dart';
@@ -24,9 +25,10 @@ class MyApp extends StatelessWidget {
         'login': (BuildContext context) => LoginPage(),
         'register': (BuildContext context) => RegisterPage(),
         'client/products/list': (BuildContext context) => ClientProductsListPage(),
+        'client/update': (BuildContext context) => ClientUpdatePage(),
         'delivery/orders/list': (BuildContext context) => DeliveryOrdersListPage(),
         'restaurant/orders/list': (BuildContext context) => RestaurantOrdersListPage(),
-        'roles': (BuildContext context) => RolesPage()
+        'roles': (BuildContext context) => RolesPage(),
       },
       theme: ThemeData(
         // This is the theme of your application.

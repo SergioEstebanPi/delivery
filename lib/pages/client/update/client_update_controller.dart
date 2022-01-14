@@ -5,6 +5,7 @@ import 'package:delivery/models/response_api.dart';
 import 'package:delivery/models/user.dart';
 import 'package:delivery/provider/users_provider.dart';
 import 'package:delivery/utils/my_snackbar.dart';
+import 'package:delivery/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sn_progress_dialog/progress_dialog.dart';
@@ -15,10 +16,7 @@ class ClientUpdateController {
   BuildContext? context;
   TextEditingController nameController = new TextEditingController();
   TextEditingController lastNameController = new TextEditingController();
-  TextEditingController emailController = new TextEditingController();
   TextEditingController phoneController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
-  TextEditingController confirmPasswordController = new TextEditingController();
 
   UsersProvider usersProvider = new UsersProvider();
   PickedFile? pickedFile;
@@ -26,12 +24,19 @@ class ClientUpdateController {
   Function? refresh;
   ProgressDialog? _progressDialog;
   bool isEnable = true;
+  User? user;
+  SharedPref _sharedPref = new SharedPref();
 
   Future init(BuildContext? context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
     await usersProvider.init(context);
     _progressDialog = ProgressDialog(context: context);
+    user = User.fromJson(await _sharedPref.read('user'));
+    nameController.text = user!.name!;
+    lastNameController.text = user!.lastname!;
+    phoneController.text = user!.phone!;
+    refresh();
   }
 
   Future selectImage(ImageSource imageSource) async{
@@ -81,35 +86,16 @@ class ClientUpdateController {
     String name = nameController.text;
     String lastName = lastNameController.text;
     String phone = phoneController.text.trim();
-    String email = emailController.text.trim();
-    String password = passwordController.text.trim();
-    String confirmPassword = confirmPasswordController.text.trim();
 
     print('name $name');
     print('lastName $lastName');
-    print('email $email');
     print('phone $phone');
-    print('password $password');
-    print('confirmPassword $confirmPassword');
 
-    if(email.isEmpty ||
-        name.isEmpty ||
+    if(name.isEmpty ||
         lastName.isEmpty ||
-        phone.isEmpty ||
-        password.isEmpty ||
-        confirmPassword.isEmpty
+        phone.isEmpty
     ){
       MySnackbar.show(context!, 'Debes ingresar todos los campos');
-      return;
-    }
-
-    if(password.length < 6){
-      MySnackbar.show(context!, 'La contraseña debe tener mas de 6 caracteres');
-      return;
-    }
-
-    if(confirmPassword != password){
-      MySnackbar.show(context!, 'Las contraseñas no coinciden');
       return;
     }
 
@@ -122,11 +108,9 @@ class ClientUpdateController {
     isEnable = false;
 
     User user = User(
-        email: email,
         name: name,
         lastname: lastName,
         phone: phone,
-        password: password
     );
 
     Stream? stream = await usersProvider.createWithImage(user, imageFile!);

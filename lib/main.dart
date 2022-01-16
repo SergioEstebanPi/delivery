@@ -3,6 +3,7 @@ import 'package:delivery/pages/client/update/client_update_page.dart';
 import 'package:delivery/pages/delivery/orders/list/delivery_orders_list_page.dart';
 import 'package:delivery/pages/login/login_page.dart';
 import 'package:delivery/pages/register/register_page.dart';
+import 'package:delivery/pages/restaurant/categories/create/restaurant_categories_create_page.dart';
 import 'package:delivery/pages/restaurant/orders/list/restaurant_orders_list_page.dart';
 import 'package:delivery/pages/roles/roles_page.dart';
 import 'package:delivery/utils/my_colors.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         'client/update': (BuildContext context) => ClientUpdatePage(),
         'delivery/orders/list': (BuildContext context) => DeliveryOrdersListPage(),
         'restaurant/orders/list': (BuildContext context) => RestaurantOrdersListPage(),
+        'restaurant/categories/create': (BuildContext context) => RestaurantCategoriesCreatePage(),
         'roles': (BuildContext context) => RolesPage(),
       },
       theme: ThemeData(

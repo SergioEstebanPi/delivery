@@ -25,6 +25,10 @@ class RestaurantOrdersListController {
     MySnackbar.show(context!, 'Se cerró la sesión correctamente');
   }
 
+  void goToCategoryCreate(){
+    Navigator.pushNamed(context!, 'restaurant/categories/create');
+  }
+
   void openDrawer(){
     key.currentState!.openDrawer();
   }

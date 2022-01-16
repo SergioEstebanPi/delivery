@@ -32,7 +32,7 @@ class UsersProvider {
       };
       final res = await http.get(uri, headers: headers);
       if(res.statusCode == 401){ // no autorizado
-        Fluttertoast.showToast(msg: 'Tu sesion ha expirado');
+        Fluttertoast.showToast(msg: 'Tu sesion ha expirado getById');
         new SharedPref().logout(context!);
       }
 
@@ -70,6 +70,7 @@ class UsersProvider {
         "data": null,
       };
       ResponseApi responseApi = ResponseApi.fromJson(res);
+      print('res: ${res}');
       return null;
     }
   }
@@ -79,6 +80,7 @@ class UsersProvider {
       Uri uri = Uri.http(_url, '$_api/update');
       final request = http.MultipartRequest("PUT", uri);
       print('actualizar con token: ${token}');
+      print('el usuario: ${user.toJson()}');
       request.headers['Authorization'] = token!;
 
       if(image != null) {
@@ -106,6 +108,7 @@ class UsersProvider {
         "data": null,
       };
       ResponseApi responseApi = ResponseApi.fromJson(res);
+      print('res: ${res}');
       return null;
     }
   }

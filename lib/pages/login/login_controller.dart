@@ -21,12 +21,14 @@ class LoginController {
 
     User user = User.fromJson(await _sharedPref.read('user') ?? {});
     print('Usuario ${user.toJson()}');
-    if(user.roles != null){
-      if(user.roles!.length > 1) {
-        Navigator.pushNamedAndRemoveUntil(context!, 'roles', (route) => false);
-      } else {
-        String? route = user.roles![0].route;
-        Navigator.pushNamedAndRemoveUntil(context!, route!, (route) => false);
+    if(user != null && user.id != null){
+      if(user.roles != null){
+        if(user.roles!.length > 1) {
+          Navigator.pushNamedAndRemoveUntil(context!, 'roles', (route) => false);
+        } else {
+          String? route = user.roles![0].route;
+          Navigator.pushNamedAndRemoveUntil(context!, route!, (route) => false);
+        }
       }
     }
   }

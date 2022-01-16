@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -129,10 +130,18 @@ class RegisterController {
       password: password
     );
 
-    Stream? stream = await usersProvider.createWithImage(user, imageFile!);
-    stream!.listen((res) {
+    Completer<String> completer = Completer();
+    String content = "";
 
+    Stream? stream = await usersProvider.createWithImage(user, imageFile!);
+    stream!.listen((data) {
+      content += data;
+    },
+    onDone: () async {
       _progressDialog!.close();
+
+      completer.complete(content);
+      String res = await completer.future;
 
       //ResponseApi responseApi = await usersProvider.create(user);
       ResponseApi responseApi = ResponseApi.fromJson(json.decode(res));
@@ -150,7 +159,10 @@ class RegisterController {
       }
 
       print('RESPUESTA: ${responseApi.toJson()}');
-
+    },
+    onError: (e) async {
+      print('Error');
+      completer.completeError(e);
     });
 
   }

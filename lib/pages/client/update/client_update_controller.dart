@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -26,17 +27,19 @@ class ClientUpdateController {
   ProgressDialog? _progressDialog;
   bool isEnable = true;
   User? user;
-  SharedPref _sharedPref = new SharedPref();
+  SharedPref _sharedPref = SharedPref();
 
   Future init(BuildContext? context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
-    await usersProvider.init(context);
     _progressDialog = ProgressDialog(context: context);
     user = User.fromJson(await _sharedPref.read('user'));
+    print('Formulario editar usuario: ${user.toString()}');
+    await usersProvider.init(context, token: user!.sessionToken);
     nameController.text = user!.name!;
     lastNameController.text = user!.lastname!;
     phoneController.text = user!.phone!;
+    //imageFile = File(user!.image!);
     refresh();
   }
 
@@ -111,17 +114,25 @@ class ClientUpdateController {
         image: user!.image
     );
 
-    Stream? stream = await usersProvider.update(myUser, imageFile);
-    stream!.listen((res) async {
+    Completer<String> completer = Completer();
+    String content = "";
 
+    Stream? stream = await usersProvider.update(myUser, imageFile);
+    stream!.listen((data) async {
+      content += data;
+    },
+    onDone: () async {
       _progressDialog!.close();
+
+      completer.complete(content);
+      String res = await completer.future;
 
       //ResponseApi responseApi = await usersProvider.create(user);
       ResponseApi responseApi = ResponseApi.fromJson(json.decode(res));
 
       print("Respuesta registro: ${responseApi.toJson()}");
 
-      Fluttertoast.showToast(msg: responseApi.message);
+      MySnackbar.show(context!, responseApi.message);
 
       if(responseApi.success){
         user = await usersProvider.getById(myUser.id!); //obtiene el usuario de la base de datos
@@ -134,6 +145,10 @@ class ClientUpdateController {
 
       print('RESPUESTA: ${responseApi.toJson()}');
 
+    },
+    onError: (e) {
+      print('Error');
+      completer.completeError(e);
     });
 
   }

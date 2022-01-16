@@ -96,7 +96,7 @@ class _ClientUpdatePageState extends State<ClientUpdatePage> {
             child: ClipOval(
                 child: (_con.imageFile != null)
                     ? Image.file(_con.imageFile!)
-                    : (_con.user!.image != null)
+                    : (_con.user != null && _con.user!.image != null)
                 ? Image.network(_con.user!.image!)
                 : Image.asset('assets/img/user_profile_2.png')
             ),

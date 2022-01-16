@@ -64,7 +64,7 @@ class UsersProvider {
     }
   }
 
-  Future<Stream?> update(User user, File image) async {
+  Future<Stream?> update(User user, File? image) async {
     try {
       Uri uri = Uri.http(_url, '$_api/update');
       final request = http.MultipartRequest("PUT", uri);

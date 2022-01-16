@@ -16,11 +16,11 @@ class UsersProvider {
   String _api = '/api/users';
 
   late BuildContext? context;
-  String? token;
+  User? sessionUser;
 
-  Future init(BuildContext? context, {String? token}) async {
+  Future init(BuildContext? context, {User? sessionUser}) async {
     this.context = context;
-    this.token = token;
+    this.sessionUser = sessionUser;
   }
 
   Future<User?> getById(String id) async {
@@ -28,7 +28,7 @@ class UsersProvider {
       Uri uri = Uri.http(_url, '$_api/findById/$id');
       Map<String, String> headers = {
         'Content-type': 'application/json',
-        'Authorization': token!
+        'Authorization': sessionUser!.sessionToken!
       };
       final res = await http.get(uri, headers: headers);
       if(res.statusCode == 401){ // no autorizado
@@ -79,9 +79,9 @@ class UsersProvider {
     try {
       Uri uri = Uri.http(_url, '$_api/update');
       final request = http.MultipartRequest("PUT", uri);
-      print('actualizar con token: ${token}');
+      print('actualizar con token: ${sessionUser!.sessionToken}');
       print('el usuario: ${user.toJson()}');
-      request.headers['Authorization'] = token!;
+      request.headers['Authorization'] = sessionUser!.sessionToken!;
 
       if(image != null) {
         request.files.add(http.MultipartFile(
@@ -96,7 +96,7 @@ class UsersProvider {
       final response = await request.send();
       if(response.statusCode == 401) {
         Fluttertoast.showToast(msg: 'Tu sesion ha expirado');
-        new SharedPref().logout(context!);
+        new SharedPref().logout(context!, idUser: user.id);
       }
 
       return response.stream.transform(utf8.decoder);
@@ -143,6 +143,32 @@ class UsersProvider {
     try {
       Uri uri = Uri.http(_url, '$_api/login');
       String bodyParams = json.encode({"email": email, "password": password});
+      Map<String, String> headers = {
+        'Content-type': 'application/json'
+      };
+      print("URI $uri");
+      print("bodyParams $bodyParams");
+      print("headers $headers");
+      final res = await http.post(uri, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+      ResponseApi responseApi = ResponseApi.fromJson(data);
+      return responseApi;
+    } catch(e) {
+      Map<String, dynamic> res = {
+        "message": "",
+        "error": "Error ${e}",
+        "success": false,
+        "data": null,
+      };
+      ResponseApi responseApi = ResponseApi.fromJson(res);
+      return responseApi;
+    }
+  }
+
+  Future<ResponseApi> logout(String idUser) async {
+    try {
+      Uri uri = Uri.http(_url, '$_api/logout');
+      String bodyParams = json.encode({"id": idUser});
       Map<String, String> headers = {
         'Content-type': 'application/json'
       };

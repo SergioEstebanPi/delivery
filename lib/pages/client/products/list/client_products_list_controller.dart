@@ -19,7 +19,7 @@ class ClientProductsListController {
   }
 
   void logout(){
-    _sharedPref.logout(context!);
+    _sharedPref.logout(context!, idUser: user!.id);
     MySnackbar.show(context!, 'Se cerró la sesión correctamente');
   }
 

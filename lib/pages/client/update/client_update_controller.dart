@@ -35,7 +35,7 @@ class ClientUpdateController {
     _progressDialog = ProgressDialog(context: context);
     user = User.fromJson(await _sharedPref.read('user'));
     print('Formulario editar usuario: ${user.toString()}');
-    await usersProvider.init(context, token: user!.sessionToken);
+    await usersProvider.init(context, sessionUser: user);
     nameController.text = user!.name!;
     lastNameController.text = user!.lastname!;
     phoneController.text = user!.phone!;

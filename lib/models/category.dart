@@ -9,6 +9,7 @@ class Category {
   String? id;
   String? name;
   String? description;
+  List<Category> toList = [];
 
   Category({
     this.id,
@@ -21,6 +22,17 @@ class Category {
     name: json["name"],
     description: json["description"],
   );
+
+  Category.fromJsonList(List<dynamic> jsonList) {
+    if(jsonList == null){
+      return;
+    }
+
+    jsonList.forEach((item) {
+      Category category = Category.fromJson(item);
+      toList.add(category);
+    });
+  }
 
   Map<String, dynamic> toJson() => {
     "id": id,

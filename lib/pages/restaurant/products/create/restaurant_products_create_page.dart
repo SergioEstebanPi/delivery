@@ -31,6 +31,7 @@ class _RestaurantProductsCreatePageState extends State<RestaurantProductsCreateP
       ),
       body: ListView(
         children: [
+          SizedBox(height: 30,),
           _textFieldName(),
           _textFieldDescription(),
           _textFieldPrice(),
@@ -46,7 +47,7 @@ class _RestaurantProductsCreatePageState extends State<RestaurantProductsCreateP
               ],
             ),
           ),
-          _dropDownCategories([])
+          _dropDownCategories(_con.categories)
         ],
       ),
       bottomNavigationBar: _buttonCreate(),
@@ -157,6 +158,19 @@ class _RestaurantProductsCreatePageState extends State<RestaurantProductsCreateP
         );
   }
 
+  List<DropdownMenuItem<String>> _dropItems (List<Category> categories){
+    List<DropdownMenuItem<String>> list = [];
+    if(categories != null){
+      categories.forEach((category) {
+        list.add(DropdownMenuItem(
+          child: Text(category.name!),
+          value: category.id,
+        ));
+      });
+    }
+    return list;
+  }
+
   Widget _dropDownCategories(List<Category> categories){
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 33),
@@ -180,24 +194,31 @@ class _RestaurantProductsCreatePageState extends State<RestaurantProductsCreateP
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: DropdownButton<Category>(
-                  hint: Text(
+                child: DropdownButton<String>(
+                  elevation: 3,
+                  isExpanded: true,
+                  hint: const Text(
                     'Seleccionar categoria',
                     style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 16
+                        color: Colors.grey,
+                        fontSize: 16
                     ),
                   ),
                   underline: Container(
+                    margin: EdgeInsets.only(right: 0, left: 250),
                     alignment: Alignment.centerRight,
-                    child: Icon(Icons.arrow_drop_down_circle),
-                    color: MyColors.primaryColor,
+                    child: Icon(
+                      Icons.arrow_drop_down_circle,
+                      color: MyColors.primaryColor,
+                    ),
                   ),
-                  elevation: 3,
-                  isExpanded: true,
-                  items: [],
-                  onChanged: (Object? value) {
-
+                  items: _dropItems(categories),
+                  value: _con.idCategory,
+                  onChanged: (option) {
+                    setState(() {
+                      print('Categoria seleccionada $option');
+                      _con.idCategory = option; // establece el valor seleccionado
+                    });
                   },
                 ),
               )

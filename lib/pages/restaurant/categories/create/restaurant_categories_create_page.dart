@@ -28,6 +28,7 @@ class _RestaurantCategoriesCreatePageState extends State<RestaurantCategoriesCre
       ),
       body: Column(
         children: [
+          SizedBox(height: 30,),
           _textFieldCategoryName(),
           _textFieldDescription(),
         ],

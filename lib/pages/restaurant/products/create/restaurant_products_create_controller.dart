@@ -14,19 +14,27 @@ class RestaurantProductsCreateController {
   ProgressDialog? _progressDialog;
   SharedPref _sharedPref = SharedPref();
   User? user;
+  List<Category> categories = [];
+  String? idCategory; // id categoria seleccionada
 
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   MoneyMaskedTextController priceController = MoneyMaskedTextController();
 
-  //CategoriesProvider _categoriesProvider = CategoriesProvider();
+  CategoriesProvider _categoriesProvider = CategoriesProvider();
 
   Future init(BuildContext? context, Function? refresh) async{
     this.context = context;
     this.refresh = refresh;
     user = User.fromJson(await _sharedPref.read('user'));
-    //_categoriesProvider.init(context, sessionUser: user);
+    _categoriesProvider.init(context, sessionUser: user);
     _progressDialog = ProgressDialog(context: context);
+    getCategories();
+  }
+
+  void getCategories() async {
+    categories = await _categoriesProvider.getAll();
+    refresh!();
   }
 
   void createProduct() async {
@@ -48,15 +56,15 @@ class RestaurantProductsCreateController {
         description: description
     );
 
-    //ResponseApi responseApi = await _categoriesProvider.create(category);
+    ResponseApi responseApi = await _categoriesProvider.create(category);
 
     _progressDialog!.close();
-    //MySnackbar.show(context!, responseApi.message);
+    MySnackbar.show(context!, responseApi.message);
 
-    //if(responseApi.success){
+    if(responseApi.success){
       nameController.text = '';
       descriptionController.text = '';
-    //}
+    }
 
   }
 

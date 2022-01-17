@@ -40,6 +40,7 @@ dependencies:
   image_picker: ^0.8.4+4
   sn_progress_dialog: ^1.0.3
   fluttertoast: ^8.0.8
+  extended_masked_text: ^2.3.1
 
 dev_dependencies:
   flutter_test:

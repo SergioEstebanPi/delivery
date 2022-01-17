@@ -5,6 +5,7 @@ import 'package:delivery/pages/login/login_page.dart';
 import 'package:delivery/pages/register/register_page.dart';
 import 'package:delivery/pages/restaurant/categories/create/restaurant_categories_create_page.dart';
 import 'package:delivery/pages/restaurant/orders/list/restaurant_orders_list_page.dart';
+import 'package:delivery/pages/restaurant/products/create/restaurant_products_create_page.dart';
 import 'package:delivery/pages/roles/roles_page.dart';
 import 'package:delivery/utils/my_colors.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         'delivery/orders/list': (BuildContext context) => DeliveryOrdersListPage(),
         'restaurant/orders/list': (BuildContext context) => RestaurantOrdersListPage(),
         'restaurant/categories/create': (BuildContext context) => RestaurantCategoriesCreatePage(),
+        'restaurant/products/create': (BuildContext context) => RestaurantProductsCreatePage(),
         'roles': (BuildContext context) => RolesPage(),
       },
       theme: ThemeData(

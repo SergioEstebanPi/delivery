@@ -46,7 +46,10 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primaryColor: MyColors.primaryColor,
         primarySwatch: Colors.red,
-        fontFamily: 'NimbusSans'
+        fontFamily: 'NimbusSans',
+        appBarTheme: AppBarTheme(
+          elevation: 0
+        )
       ),
       debugShowCheckedModeBanner: false,
     );

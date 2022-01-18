@@ -154,9 +154,8 @@ class RegisterController {
         Future.delayed(const Duration(seconds: 3), () {
           Navigator.pushReplacementNamed(context!, 'login');
         });
-      } else {
-        isEnable = true;
       }
+      isEnable = true;
 
       print('RESPUESTA: ${responseApi.toJson()}');
     },

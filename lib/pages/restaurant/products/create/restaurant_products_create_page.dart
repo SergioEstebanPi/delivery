@@ -244,7 +244,8 @@ class _RestaurantProductsCreatePageState extends State<RestaurantProductsCreateP
           vertical: 30
       ),
       child: ElevatedButton(
-        onPressed: _con.createProduct,
+        onPressed: _con.isEnable ?
+          _con.createProduct : null,
         child: Text('Crear producto'),
         style: ElevatedButton.styleFrom(
             primary: MyColors.primaryColor,

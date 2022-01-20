@@ -105,76 +105,79 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
     } else {
       imageProduct = AssetImage('assets/img/pizza2.png');
     }
-    return Container(
-      height: 250,
-      child: Card(
-        color: Colors.white,
-        elevation: 3,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15)
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              top: -1,
-              right: -1,
-              child: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: MyColors.primaryColor,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(15),
-                    topRight: Radius.circular(20)
+    return GestureDetector(
+      onTap: _con.openBottomSheet,
+      child: Container(
+        height: 250,
+        child: Card(
+          color: Colors.white,
+          elevation: 3,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15)
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                top: -1,
+                right: -1,
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: MyColors.primaryColor,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(15),
+                      topRight: Radius.circular(20)
+                    )
+                  ),
+                  child: Icon(Icons.add, color: Colors.white,),
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 150,
+                    width: MediaQuery.of(context).size.width * 0.45,
+                    padding: EdgeInsets.all(20),
+                    child: FadeInImage(
+                      image: imageProduct,
+                      fit: BoxFit.contain,
+                      fadeInDuration: Duration(milliseconds: 50),
+                      placeholder: AssetImage(
+                        'assets/img/no-image.png'
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    height: 33,
+                    child: Text(
+                      product.name!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'NimbusSans'
+                      ),
+                    ),
+                  ),
+                  Spacer(),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    child: Text(
+                        '${product.price!}\$',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'NimbusSans'
+                      ),
+                    ),
                   )
-                ),
-                child: Icon(Icons.add, color: Colors.white,),
-              ),              
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 150,
-                  width: MediaQuery.of(context).size.width * 0.45,
-                  padding: EdgeInsets.all(20),
-                  child: FadeInImage(
-                    image: imageProduct,
-                    fit: BoxFit.contain,
-                    fadeInDuration: Duration(milliseconds: 50),
-                    placeholder: AssetImage(
-                      'assets/img/no-image.png'
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  height: 33,
-                  child: Text(
-                    product.name!,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontFamily: 'NimbusSans'
-                    ),
-                  ),
-                ),
-                Spacer(),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  child: Text(
-                      '${product.price!}\$',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'NimbusSans'
-                    ),
-                  ),
-                )
-              ],
-            )
-          ],
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

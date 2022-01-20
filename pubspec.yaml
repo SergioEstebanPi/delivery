@@ -41,6 +41,7 @@ dependencies:
   sn_progress_dialog: ^1.0.3
   fluttertoast: ^8.0.8
   extended_masked_text: ^2.3.1
+  modal_bottom_sheet: ^2.0.0
 
 dev_dependencies:
   flutter_test:

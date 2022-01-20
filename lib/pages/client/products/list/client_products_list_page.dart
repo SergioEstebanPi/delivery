@@ -62,7 +62,13 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
         drawer: _drawer(),
         body: TabBarView(
           children: _con.categories.map((Category category) {
-              return _cardProduct();
+              return GridView.count(
+                crossAxisCount: 2,
+                childAspectRatio: 0.7,
+                children: List.generate(10, (index) {
+                  return _cardProduct();
+                }),
+              );
             }).toList(),
         ),
       ),
@@ -116,16 +122,20 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20),
+                  height: 33,
                   child: Text(
                     'Nombre producto',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 15,
                       fontFamily: 'NimbusSans'
                     ),
                   ),
                 ),
+                Spacer(),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: Text(
                       '0.0\$',
                     style: TextStyle(

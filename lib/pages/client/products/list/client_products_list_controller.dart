@@ -1,6 +1,8 @@
 import 'package:delivery/models/category.dart';
+import 'package:delivery/models/product.dart';
 import 'package:delivery/models/user.dart';
 import 'package:delivery/provider/categories_provider.dart';
+import 'package:delivery/provider/products_provider.dart';
 import 'package:delivery/utils/my_snackbar.dart';
 import 'package:delivery/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +18,20 @@ class ClientProductsListController {
   CategoriesProvider _categoriesProvider = new CategoriesProvider();
   late List<Category> categories = [];
 
+  late ProductsProvider _productsProvider = new ProductsProvider();
+
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
     user = User.fromJson(await _sharedPref.read('user'));
     _categoriesProvider.init(context, sessionUser: user);
+    _productsProvider.init(context, sessionUser: user);
     getCategories();
     refresh();
+  }
+
+  Future<List<Product>> getProducts(String idCategory) async {
+    return await _productsProvider.findByCategoryId(idCategory);
   }
 
   void getCategories() async {

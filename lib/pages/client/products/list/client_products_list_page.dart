@@ -62,8 +62,82 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
         drawer: _drawer(),
         body: TabBarView(
           children: _con.categories.map((Category category) {
-              return Text('Hola');
+              return _cardProduct();
             }).toList(),
+        ),
+      ),
+    );
+  }
+
+  Widget _cardProduct(){
+    return Container(
+      height: 250,
+      child: Card(
+        color: Colors.white,
+        elevation: 3,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15)
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              top: -1,
+              right: -1,
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: MyColors.primaryColor,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(15),
+                    topRight: Radius.circular(20)
+                  )
+                ),
+                child: Icon(Icons.add, color: Colors.white,),
+              ),              
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 150,
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  padding: EdgeInsets.all(20),
+                  child: FadeInImage(
+                    image: AssetImage(
+                      'assets/img/pizza2.png'
+                    ),
+                    fit: BoxFit.contain,
+                    fadeInDuration: Duration(milliseconds: 50),
+                    placeholder: AssetImage(
+                      'assets/img/no-image.png'
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    'Nombre producto',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontFamily: 'NimbusSans'
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                      '0.0\$',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'NimbusSans'
+                    ),
+                  ),
+                )
+              ],
+            )
+          ],
         ),
       ),
     );

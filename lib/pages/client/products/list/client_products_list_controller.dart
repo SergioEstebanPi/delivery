@@ -1,4 +1,6 @@
+import 'package:delivery/models/category.dart';
 import 'package:delivery/models/user.dart';
+import 'package:delivery/provider/categories_provider.dart';
 import 'package:delivery/utils/my_snackbar.dart';
 import 'package:delivery/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +13,21 @@ class ClientProductsListController {
   User? user;
   Function? refresh;
 
+  CategoriesProvider _categoriesProvider = new CategoriesProvider();
+  late List<Category> categories = [];
+
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
     user = User.fromJson(await _sharedPref.read('user'));
+    _categoriesProvider.init(context, sessionUser: user);
+    getCategories();
     refresh();
+  }
+
+  void getCategories() async {
+    categories = await _categoriesProvider.getAll();
+    refresh!();
   }
 
   void logout(){

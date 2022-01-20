@@ -1,3 +1,4 @@
+import 'package:delivery/models/category.dart';
 import 'package:delivery/pages/client/products/list/client_products_list_controller.dart';
 import 'package:delivery/utils/my_colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,31 +25,45 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _con.key,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(170),
-        child: AppBar(
-          backgroundColor: Colors.white,
-          automaticallyImplyLeading: false,
-          actions: [
-            _shoppingBag()
-          ],
-          flexibleSpace: Column(
-            children: [
-              SizedBox(height: 60,),
-              _menuDrawer(),
-              SizedBox(height: 20,),
-              _textFieldSearch(),
+    return DefaultTabController(
+      length: _con.categories.length,
+      child: Scaffold(
+        key: _con.key,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(170),
+          child: AppBar(
+            backgroundColor: Colors.white,
+            automaticallyImplyLeading: false,
+            actions: [
+              _shoppingBag()
             ],
+            flexibleSpace: Column(
+              children: [
+                SizedBox(height: 60,),
+                _menuDrawer(),
+                SizedBox(height: 20,),
+                _textFieldSearch(),
+              ],
+            ),
+            bottom: TabBar(
+              indicatorColor: MyColors.primaryColor,
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.grey[400],
+              isScrollable: true,
+              tabs: List<Widget>.generate(_con.categories.length, (index) {
+                  return Tab(
+                    child: Text(_con.categories[index].name ?? ''),
+                  );
+                }
+              ),
+            ),
           ),
         ),
-      ),
-      drawer: _drawer(),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: _con.logout,
-          child: Text("Cerrar sesión"),
+        drawer: _drawer(),
+        body: TabBarView(
+          children: _con.categories.map((Category category) {
+              return Text('Hola');
+            }).toList(),
         ),
       ),
     );

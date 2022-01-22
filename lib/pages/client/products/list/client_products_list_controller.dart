@@ -41,10 +41,10 @@ class ClientProductsListController {
     refresh!();
   }
 
-  void openBottomSheet(){
+  void openBottomSheet(Product product){
     showMaterialModalBottomSheet(
         context: context!,
-        builder: (context) => ClientProductsDetailPage(),
+        builder: (context) => ClientProductsDetailPage(product: product,),
     );
   }
 

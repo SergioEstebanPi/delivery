@@ -99,14 +99,10 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
   }
 
   Widget _cardProduct(Product product){
-    var imageProduct;
-    if(product.image1 != null) {
-      imageProduct = NetworkImage(product.image1!);
-    } else {
-      imageProduct = AssetImage('assets/img/pizza2.png');
-    }
     return GestureDetector(
-      onTap: _con.openBottomSheet,
+      onTap: () {
+        _con.openBottomSheet(product);
+      },
       child: Container(
         height: 250,
         child: Card(
@@ -141,7 +137,9 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
                     width: MediaQuery.of(context).size.width * 0.45,
                     padding: EdgeInsets.all(20),
                     child: FadeInImage(
-                      image: imageProduct,
+                      image: product.image1 != null
+                        ? NetworkImage(product.image1!)
+                        : AssetImage('assets/img/pizza2.png') as ImageProvider,
                       fit: BoxFit.contain,
                       fadeInDuration: Duration(milliseconds: 50),
                       placeholder: AssetImage(
@@ -259,13 +257,6 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
   }
 
   Widget _drawer(){
-    var userImage;
-    if(_con.user?.image != null){
-      userImage = NetworkImage(_con.user!.image!);
-    } else {
-      userImage = AssetImage('assets/img/no-image.png');
-    }
-
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -310,7 +301,9 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
                     height: 60,
                     margin: EdgeInsets.only(top: 10),
                     child: FadeInImage(
-                      image: userImage,
+                      image:  _con.user?.image != null
+                        ? NetworkImage(_con.user!.image!)
+                        : AssetImage('assets/img/no-image.png') as ImageProvider,
                       fit: BoxFit.contain,
                       fadeInDuration: Duration(milliseconds: 50),
                       placeholder: AssetImage('assets/img/no-image.png'),

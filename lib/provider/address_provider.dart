@@ -6,6 +6,7 @@ import 'package:delivery/models/response_api.dart';
 import 'package:delivery/models/user.dart';
 import 'package:delivery/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class AddressProvider {
@@ -21,10 +22,9 @@ class AddressProvider {
     this.sessionUser = sessionUser;
   }
 
-  /*
-  Future<List<Category>> getAll() async {
+  Future<List<Address>> getByUserId(String? idUser) async {
     try{
-      Uri uri = Uri.http(_url, '$_api/getAll');
+      Uri uri = Uri.http(_url, '$_api/findByUserId/${idUser}');
       Map<String, String> headers = {
         'Content-type': 'application/json',
         'Authorization': sessionUser!.sessionToken!
@@ -38,15 +38,14 @@ class AddressProvider {
         SharedPref().logout(context!, idUser: sessionUser!.id);
       }
 
-      final data = json.decode(res.body); // categorias
-      Category category = Category.fromJsonList(data);
-      return category.toList;
+      final data = json.decode(res.body); // direcciones
+      Address address = Address.fromJsonList(data);
+      return address.toList;
     } catch(error){
       print('Error $error');
       return [];
     }
   }
-   */
 
   Future<ResponseApi> create(Address address) async {
     try {

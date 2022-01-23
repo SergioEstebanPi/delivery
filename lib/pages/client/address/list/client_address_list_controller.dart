@@ -27,14 +27,19 @@ class ClientAddressListController {
     _sharedPref.save('address', address[value!]);
     print('Valor radio: $value');
 
-    Address a = Address.fromJson(await _sharedPref.read('address') ?? {});
-    print('Se guardo la direccion $a');
-
     refresh!();
   }
 
   Future<List<Address>> getAddress() async {
     address = await _addressProvider.getByUserId(user!.id);
+
+    Address a = Address.fromJson(await _sharedPref.read('address') ?? {});
+    print('Se guardo la direccion $a');
+    int index = address.indexWhere((ad) => ad.id == a.id);
+    if(index != -1){
+      radioValue = index;
+    }
+
     return address;
   }
 

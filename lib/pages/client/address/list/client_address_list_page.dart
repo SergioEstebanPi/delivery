@@ -62,6 +62,7 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
     return Column(
       children: [
         Container(
+            width: double.infinity,
             margin: EdgeInsets.only(top: 30),
             child: NoDataWidget(
                 text: 'Agrega una nueva direccion'

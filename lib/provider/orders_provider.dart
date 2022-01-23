@@ -38,7 +38,7 @@ class OrdersProvider {
         SharedPref().logout(context!, idUser: sessionUser!.id);
       }
 
-      final data = json.decode(res.body); // direcciones
+      final data = json.decode(res.body); // ordenes
       Order order = Order.fromJsonList(data);
       return order.toList;
     } catch(error){

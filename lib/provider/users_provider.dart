@@ -32,7 +32,7 @@ class UsersProvider {
       };
       final res = await http.get(uri, headers: headers);
       if(res.statusCode == 401){ // no autorizado
-        Fluttertoast.showToast(msg: 'Tu sesion ha expirado getById');
+        Fluttertoast.showToast(msg: 'Tu sesion ha expirado');
         new SharedPref().logout(context!);
       }
 
@@ -42,6 +42,28 @@ class UsersProvider {
     } catch(e){
       print('Error $e');
       return null;
+    }
+  }
+
+  Future<List<User>> getDeliveryMen() async {
+    try {
+      Uri uri = Uri.http(_url, '$_api/findDeliveryMen');
+      Map<String, String> headers = {
+        'Content-type': 'application/json',
+        'Authorization': sessionUser!.sessionToken!
+      };
+      final res = await http.get(uri, headers: headers);
+      if(res.statusCode == 401){ // no autorizado
+        Fluttertoast.showToast(msg: 'Tu sesion ha expirado');
+        new SharedPref().logout(context!);
+      }
+
+      final data = json.decode(res.body);
+      User user = User.fromJsonList(data);
+      return user.toList;
+    } catch(e){
+      print('Error $e');
+      return [];
     }
   }
 

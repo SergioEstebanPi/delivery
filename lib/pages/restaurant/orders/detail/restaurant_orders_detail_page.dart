@@ -36,7 +36,7 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Orden #${_con.order!.id ?? ''}'),
+        title: Text('Orden #${_con.order != null ?_con.order!.id ?? '' : ''}'),
         actions: [
           Container(
             margin: EdgeInsets.only(top: 17, right: 15),
@@ -61,24 +61,31 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
                   indent: 30, // margen izquierdo
                 ),
                 _textDescription(),
-                _dropDownUsers([]),
-                _textData('Cliente:', '${_con.order!.client!.name} ${_con.order!.client!.lastname}'),
-                _textData('Entregar en:', '${_con.order!.address!.address}'),
+                _dropDownUsers(_con.users),
+                _textData('Cliente:', _con.order != null
+                    ? '${_con.order!.client!.name} ${_con.order ?? _con.order!.client!.lastname}'
+                    : ''),
+                _textData('Entregar en:', _con.order != null
+                    ? '${_con.order!.address!.address}'
+                    : ''),
                 _textData(
                     'Fecha de pedido:',
-                    '${RelativeTimeUtil.getRelativeTime(_con.order!.timestamp ?? 0)}'
+                    _con.order != null
+                        ? '${RelativeTimeUtil.getRelativeTime(_con.order!.timestamp ?? 0)}'
+                        : ''
                 ),
                 _buttonNext(),
               ],
           ),
         ),
       ),
-      body: _con.order!.products.length > 0
-        ? ListView(
-          children: _con.order!.products.map((Product product) {
-            return _cardProduct(product);
-          }).toList(),
-        )
+      body:  _con.order != null
+          ? (_con.order!.products.length > 0)
+            ? ListView(
+              children: _con.order!.products.map((Product product) {
+                return _cardProduct(product);
+              }).toList())
+          : NoDataWidget(text: 'Ningun producto agregado')
         : NoDataWidget(text: 'Ningun producto agregado'),
     );
   }
@@ -88,7 +95,25 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
     if(users != null){
       users.forEach((user) {
         list.add(DropdownMenuItem(
-          child: Text(user.name!),
+          child: Row(
+            children: [
+              Container(
+                height: 40,
+                width: 40,
+                margin: EdgeInsets.only(top: 10),
+                child: FadeInImage(
+                  image:  user.image != null
+                      ? NetworkImage(user.image!)
+                      : AssetImage('assets/img/no-image.png') as ImageProvider,
+                  fit: BoxFit.cover,
+                  fadeInDuration: Duration(milliseconds: 50),
+                  placeholder: AssetImage('assets/img/no-image.png'),
+                ),
+              ),
+              SizedBox(width: 5,),
+              Text(user.name!),
+            ],
+          ),
           value: user.id,
         ));
       });
@@ -143,11 +168,11 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
                     ),
                   ),
                   items: _dropItems(users),
-                  value: '1',
+                  value:_con.idDelivery,
                   onChanged: (option) {
                     setState(() {
                       print('Repartidor seleccionado $option');
-                      //_con.idCategory = option; // establece el valor seleccionado
+                      _con.idDelivery = option; // establece el valor seleccionado
                     });
                   },
                 ),

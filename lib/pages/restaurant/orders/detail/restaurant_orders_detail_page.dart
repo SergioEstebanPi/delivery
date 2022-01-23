@@ -3,6 +3,7 @@ import 'package:delivery/models/product.dart';
 import 'package:delivery/models/user.dart';
 import 'package:delivery/pages/restaurant/orders/detail/restaurant_orders_detail_controller.dart';
 import 'package:delivery/utils/my_colors.dart';
+import 'package:delivery/utils/relative_time_util.dart';
 import 'package:delivery/widgets/no_data_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +64,10 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
                 _dropDownUsers([]),
                 _textData('Cliente:', '${_con.order!.client!.name} ${_con.order!.client!.lastname}'),
                 _textData('Entregar en:', '${_con.order!.address!.address}'),
-                _textData('Fecha de pedido:', '${_con.order!.timestamp}'),
+                _textData(
+                    'Fecha de pedido:',
+                    '${RelativeTimeUtil.getRelativeTime(_con.order!.timestamp ?? 0)}'
+                ),
                 _buttonNext(),
               ],
           ),
@@ -175,7 +179,7 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
               Text(
                 'Cantidad: ${product.quantity ?? 0}',
                 style: TextStyle(
-                    fontWeight: FontWeight.bold
+                    fontSize: 13
                 ),
               ),
             ],
@@ -187,9 +191,9 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
 
   Widget _imageProduct(Product product){
     return Container(
-      width: 90,
-      height: 90,
-      padding: EdgeInsets.all(10),
+      width: 50,
+      height: 50,
+      padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(20)),
           color: Colors.grey[200]

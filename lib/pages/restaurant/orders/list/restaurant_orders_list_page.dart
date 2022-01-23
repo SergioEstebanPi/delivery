@@ -23,18 +23,73 @@ class _RestaurantOrdersListPageState extends State<RestaurantOrdersListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _con.key,
-      appBar: AppBar(
-        leading: _menuDrawer(),
-      ),
-      drawer: _drawer(),
-      body: Container(
-        child: Text(
-            'Restaurant orders list',
-          style: TextStyle(
-            fontSize: 18
+    return DefaultTabController(
+      length: _con.categories.length,
+      child: Scaffold(
+        key: _con.key,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(100),
+          child: AppBar(
+            backgroundColor: Colors.white,
+            automaticallyImplyLeading: false,
+            actions: [
+              //_shoppingBag()
+            ],
+            flexibleSpace: Column(
+              children: [
+                SizedBox(height: 60,),
+                _menuDrawer(),
+              ],
+            ),
+            bottom: TabBar(
+              indicatorColor: MyColors.primaryColor,
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.grey[400],
+              isScrollable: true,
+              tabs: List<Widget>.generate(_con.categories.length, (index) {
+                return Tab(
+                  child: Text(_con.categories[index]),
+                );
+              }
+              ),
+            ),
           ),
+        ),
+        drawer: _drawer(),
+        body: TabBarView(
+          children: _con.categories.map((String category) {
+            return Container(
+            child: Text('')
+            );
+              /*FutureBuilder(
+                future: _con.getProducts(category.id!),
+                builder: (context, AsyncSnapshot<List<Product>> snapshot) {
+                  if(snapshot.hasData){
+                    if(snapshot.data!.length > 0){
+                      return GridView.builder(
+                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.7
+                        ),
+                        itemCount: snapshot.data != null ? snapshot.data!.length : 0,
+                        itemBuilder: (_, index) {
+                          return _cardProduct(snapshot.data![index]);
+                        },
+                      );
+                    } else {
+                      return NoDataWidget(
+                          text: "No hay productos"
+                      );
+                    }
+                  } else {
+                    return NoDataWidget(
+                        text: "No hay productos"
+                    );
+                  }
+                }
+            );*/
+          }).toList(),
         ),
       ),
     );

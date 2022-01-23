@@ -12,6 +12,12 @@ class RestaurantOrdersListController {
   GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
   User? user;
   Function? refresh;
+  List<String> categories = [
+    'PAGADO',
+    'DESPACHADO',
+    'EN CAMINO',
+    'ENTREGADO'
+  ];
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;

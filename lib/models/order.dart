@@ -22,6 +22,7 @@ class Order {
   List<Order> toList = [];
   User? client;
   Address? address;
+  User? delivery;
 
   Order({
     this.id,
@@ -35,6 +36,7 @@ class Order {
     required this.products,
     this.client,
     this.address,
+    this.delivery,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
@@ -55,6 +57,9 @@ class Order {
     address: json["address"] is String
         ? addressFromJson(json['address'])
         : Address.fromJson(json["address"] ?? {}),
+    delivery: json["delivery"] is String
+        ? userFromJson(json['delivery'])
+        : User.fromJson(json["delivery"] ?? {}),
   );
 
   Order.fromJsonList(List<dynamic> jsonList) {
@@ -80,5 +85,6 @@ class Order {
     "products": products,
     "client": client,
     "address": address,
+    "delivery": delivery,
   };
 }

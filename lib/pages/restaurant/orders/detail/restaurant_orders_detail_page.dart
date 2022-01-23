@@ -60,10 +60,17 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
                   endIndent: 30, // margen derecho
                   indent: 30, // margen izquierdo
                 ),
+                SizedBox(height: 10,),
                 _textDescription(),
-                _dropDownUsers(_con.users),
+                SizedBox(height: 10,),
+                _con.order!.status != 'PAGADO'
+                  ?_deliveryData()
+                  : Container(),
+                _con.order!.status == 'PAGADO'
+                  ? _dropDownUsers(_con.users)
+                    : Container(),
                 _textData('Cliente:', _con.order != null
-                    ? '${_con.order!.client!.name} ${_con.order ?? _con.order!.client!.lastname}'
+                    ? '${_con.order!.client!.name} ${_con.order!.client!.lastname}'
                     : ''),
                 _textData('Entregar en:', _con.order != null
                     ? '${_con.order!.address!.address}'
@@ -74,7 +81,9 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
                         ? '${RelativeTimeUtil.getRelativeTime(_con.order!.timestamp ?? 0)}'
                         : ''
                 ),
-                _buttonNext(),
+                _con.order!.status == 'PAGADO'
+                  ? _buttonNext()
+                  : Container(),
               ],
           ),
         ),
@@ -121,12 +130,41 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
     return list;
   }
 
+  Widget _deliveryData (){
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 30,),
+      child: Row(
+        children: [
+          Container(
+            height: 40,
+            width: 40,
+            margin: EdgeInsets.only(top: 5, bottom: 5),
+            child: FadeInImage(
+              image:  _con.order!.delivery!.image != null
+                  ? NetworkImage(_con.order!.delivery!.image!)
+                  : AssetImage('assets/img/no-image.png') as ImageProvider,
+              fit: BoxFit.cover,
+              fadeInDuration: Duration(milliseconds: 50),
+              placeholder: AssetImage('assets/img/no-image.png'),
+            ),
+          ),
+          SizedBox(width: 5,),
+          Text(
+              '${_con.order!.delivery!.name!} ${_con.order!.delivery!.lastname!}'
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _textDescription(){
     return Container(
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.symmetric(horizontal: 30),
       child: Text(
-          'Asignar repartidor',
+          _con.order!.status == 'PAGADO'
+            ? 'Asignar repartidor'
+            : 'Repartidor asignado',
           style: TextStyle(
             fontSize: 16,
             fontStyle: FontStyle.italic,

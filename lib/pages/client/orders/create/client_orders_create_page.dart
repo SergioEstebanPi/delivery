@@ -207,7 +207,7 @@ class _ClientOrdersCreatePageState extends State<ClientOrdersCreatePage> {
     return Container(
       margin: EdgeInsets.only(left: 30, right: 30, top: 30, bottom: 30),
       child: ElevatedButton(
-        onPressed: (){},
+        onPressed: _con.goToAddress,
         style: ElevatedButton.styleFrom(
             primary: MyColors.primaryColor,
             padding: EdgeInsets.symmetric(vertical: 5),

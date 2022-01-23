@@ -23,7 +23,6 @@ class DeliveryOrdersListController {
     'ENTREGADO'
   ];
   OrdersProvider _ordersProvider = OrdersProvider();
-  bool isUpdated = false;
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -38,13 +37,13 @@ class DeliveryOrdersListController {
   }
 
   void openBottomSheet(Order order) async {
-    isUpdated = await showMaterialModalBottomSheet(
+    var isUpdated = await showMaterialModalBottomSheet(
         context: context!,
         builder: (context) => DeliveryOrdersDetailPage(
             order: order
         )
     );
-    if(isUpdated){
+    if(isUpdated != null && isUpdated){
       refresh!();
     }
   }

@@ -39,7 +39,9 @@ class DeliveryOrdersCreateController {
     ResponseApi responseApi = await _ordersProvider.updateToOnTheWay(order!);
     //MySnackbar.show(context!, responseApi.message);
     Fluttertoast.showToast(msg: responseApi.message, toastLength: Toast.LENGTH_LONG);
-    Navigator.pop(context!, true);
+    if(responseApi.success){
+      Navigator.pushNamed(context!, 'delivery/orders/map', arguments: order!.toJson());
+    }
   }
 
   void getUsers() async {

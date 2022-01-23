@@ -27,6 +27,15 @@ class ClientAddressMapController {
     checkGPS();
   }
 
+  void selectRefPoint(){
+    Map<String, dynamic> data = {
+      'address': addressName,
+      'lat': addressLatLng!.latitude,
+      'lng': addressLatLng!.longitude
+    };
+    Navigator.pop(context!, data);
+  }
+
   Future<Null> setLocationDraggableInfo() async {
     if(initialPosition != null){
       double lat = initialPosition.target.latitude;
@@ -44,8 +53,8 @@ class ClientAddressMapController {
           addressName = '$direction #$street, $city, $department';
           addressLatLng = LatLng(lat, lng);
 
-          print('LAT: ${addressLatLng!.latitude}');
-          print('LNG: ${addressLatLng!.longitude}');
+          //print('LAT: ${addressLatLng!.latitude}');
+          //print('LNG: ${addressLatLng!.longitude}');
           refresh!();
         }
       }

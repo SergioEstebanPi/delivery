@@ -102,7 +102,7 @@ class _ClientAddressMapPageState extends State<ClientAddressMapPage> {
       width: double.infinity,
       margin: EdgeInsets.symmetric(vertical: 30, horizontal: 70),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: _con.selectRefPoint,
         child: Text(
             'SELECCIONAR ESTE PUNTO'
         ),

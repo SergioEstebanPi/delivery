@@ -32,8 +32,51 @@ class _ClientAddressMapPageState extends State<ClientAddressMapPage> {
       body: Stack(
         children: [
           _googleMaps(),
+          Container(
+            alignment: Alignment.center,
+            child: _iconMyLocation(),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 30),
+            alignment: Alignment.topCenter,
+            child: _cardAddress(),
+          ),
+          Container(
+            alignment: Alignment.bottomCenter,
+            child: _buttonSelect(),
+          ),
         ],
       ),
+    );
+  }
+
+  Widget _cardAddress(){
+    return Container(
+      child: Card(
+        color: Colors.grey[800],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Text(
+            'Calle false con carrera false',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _iconMyLocation(){
+    return Image.asset(
+      'assets/img/my_location.png',
+      width: 65,
+      height: 65,
     );
   }
 
@@ -42,8 +85,28 @@ class _ClientAddressMapPageState extends State<ClientAddressMapPage> {
       mapType: MapType.normal,
       initialCameraPosition: _con.initialPosition,
       onMapCreated: _con.onMapCreated,
-      myLocationButtonEnabled: true,
-      myLocationEnabled: true,
+      //myLocationButtonEnabled: true,
+      //myLocationEnabled: true,
+    );
+  }
+
+  Widget _buttonSelect(){
+    return Container(
+      height: 50,
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(vertical: 30, horizontal: 70),
+      child: ElevatedButton(
+        onPressed: () {},
+        child: Text(
+            'SELECCIONAR ESTE PUNTO'
+        ),
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30)
+          ),
+          primary: MyColors.primaryColor,
+        ),
+      ),
     );
   }
 

@@ -16,6 +16,8 @@ class ClientAddressCreateController {
   void openMap(){
     showMaterialModalBottomSheet(
         context: context!,
+        isDismissible: false,
+        enableDrag: false,
         builder: (context) => ClientAddressMapPage()
     );
   }

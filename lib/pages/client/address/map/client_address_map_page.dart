@@ -3,6 +3,7 @@ import 'package:delivery/utils/my_colors.dart';
 import 'package:delivery/widgets/no_data_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ClientAddressMapPage extends StatefulWidget {
   @override
@@ -28,6 +29,19 @@ class _ClientAddressMapPageState extends State<ClientAddressMapPage> {
       appBar: AppBar(
         title: Text('Ubica tu direccion en el mapa'),
       ),
+      body: Stack(
+        children: [
+          _googleMaps(),
+        ],
+      ),
+    );
+  }
+
+  Widget _googleMaps(){
+    return GoogleMap(
+      mapType: MapType.normal,
+      initialCameraPosition: _con.initialPosition,
+      onMapCreated: _con.onMapCreated,
     );
   }
 

@@ -22,6 +22,31 @@ class OrdersProvider {
     this.sessionUser = sessionUser;
   }
 
+  Future<List<Order>> getByDeliveryAndStatus(String idDelivery, String status) async {
+    try{
+      Uri uri = Uri.http(_url, '$_api/findByDeliveryIdAndStatus/${idDelivery}/${status}');
+      Map<String, String> headers = {
+        'Content-type': 'application/json',
+        'Authorization': sessionUser!.sessionToken!
+      };
+      print("URI $uri");
+      print("headers $headers");
+
+      final res = await http.get(uri, headers: headers);
+      if(res.statusCode == 401){
+        Fluttertoast.showToast(msg: 'Sesion expirada');
+        SharedPref().logout(context!, idUser: sessionUser!.id);
+      }
+
+      final data = json.decode(res.body); // ordenes
+      Order order = Order.fromJsonList(data);
+      return order.toList;
+    } catch(error){
+      print('Error $error');
+      return [];
+    }
+  }
+
   Future<List<Order>> getByStatus(String status) async {
     try{
       Uri uri = Uri.http(_url, '$_api/findByStatus/${status}');

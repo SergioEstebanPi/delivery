@@ -127,4 +127,31 @@ class OrdersProvider {
     }
   }
 
+  Future<ResponseApi> updateToOnTheWay(Order order) async {
+    try {
+      Uri uri = Uri.http(_url, '$_api/updateToOnTheWay');
+      String bodyParams = json.encode(order);
+      Map<String, String> headers = {
+        'Content-type': 'application/json',
+        'Authorization': sessionUser!.sessionToken!
+      };
+      print("URI $uri");
+      print("bodyParams $bodyParams");
+      print("headers $headers");
+      final res = await http.put(uri, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+      ResponseApi responseApi = ResponseApi.fromJson(data);
+      return responseApi;
+    } catch(e) {
+      Map<String, dynamic> res = {
+        "message": "",
+        "error": "Error ${e}",
+        "success": false,
+        "data": null,
+      };
+      ResponseApi responseApi = ResponseApi.fromJson(res);
+      return responseApi;
+    }
+  }
+
 }

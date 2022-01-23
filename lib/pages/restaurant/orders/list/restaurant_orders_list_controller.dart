@@ -23,6 +23,7 @@ class RestaurantOrdersListController {
     'ENTREGADO'
   ];
   OrdersProvider _ordersProvider = OrdersProvider();
+  bool isUpdated = false;
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -36,13 +37,16 @@ class RestaurantOrdersListController {
     return await _ordersProvider.getByStatus(status);
   }
 
-  void openBottomSheet(Order order){
-    showMaterialModalBottomSheet(
+  void openBottomSheet(Order order) async {
+    isUpdated = await showMaterialModalBottomSheet(
         context: context!,
         builder: (context) => RestaurantOrdersDetailPage(
           order: order
         )
     );
+    if(isUpdated){
+      refresh!();
+    }
   }
 
   void logout(){

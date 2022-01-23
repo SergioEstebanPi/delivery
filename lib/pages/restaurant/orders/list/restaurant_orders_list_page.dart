@@ -1,6 +1,7 @@
 import 'package:delivery/models/order.dart';
 import 'package:delivery/pages/restaurant/orders/list/restaurant_orders_list_controller.dart';
 import 'package:delivery/utils/my_colors.dart';
+import 'package:delivery/widgets/no_data_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -59,21 +60,16 @@ class _RestaurantOrdersListPageState extends State<RestaurantOrdersListPage> {
         drawer: _drawer(),
         body: TabBarView(
           children: _con.categories.map((String category) {
-            return _cardOrder();
-              /*FutureBuilder(
-                future: _con.getProducts(category.id!),
-                builder: (context, AsyncSnapshot<List<Product>> snapshot) {
+            return FutureBuilder(
+                future: _con.getOrders(category),
+                builder: (context, AsyncSnapshot<List<Order>> snapshot) {
                   if(snapshot.hasData){
                     if(snapshot.data!.length > 0){
-                      return GridView.builder(
+                      return ListView.builder(
                         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.7
-                        ),
                         itemCount: snapshot.data != null ? snapshot.data!.length : 0,
                         itemBuilder: (_, index) {
-                          return _cardProduct(snapshot.data![index]);
+                          return  _cardOrder(snapshot.data![index]);
                         },
                       );
                     } else {
@@ -87,17 +83,17 @@ class _RestaurantOrdersListPageState extends State<RestaurantOrdersListPage> {
                     );
                   }
                 }
-            );*/
+            );
           }).toList(),
         ),
       ),
     );
   }
 
-  Widget _cardOrder(){
+  Widget _cardOrder(Order order){
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      height: 160,
+      height: 155,
       child: Card(
         elevation: 3,
         shape: RoundedRectangleBorder(
@@ -120,7 +116,7 @@ class _RestaurantOrdersListPageState extends State<RestaurantOrdersListPage> {
                   width: double.infinity,
                   alignment: Alignment.center,
                   child: Text(
-                    'Order #0',
+                    'Order #${order.id}',
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.white,
@@ -139,7 +135,7 @@ class _RestaurantOrdersListPageState extends State<RestaurantOrdersListPage> {
                     margin: EdgeInsets.symmetric(vertical: 5),
                     width: double.infinity,
                     child: Text(
-                      'Pedido: 2015-05-23',
+                      'Pedido: ${order.timestamp}',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 13,
@@ -151,12 +147,12 @@ class _RestaurantOrdersListPageState extends State<RestaurantOrdersListPage> {
                     margin: EdgeInsets.symmetric(vertical: 5),
                     width: double.infinity,
                     child: Text(
-                      'Cliente: Juan',
+                      'Cliente: ${order.client!.name ?? ''} ${order.client!.lastname ?? ''}',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 13,
                       ),
-                      maxLines: 1,
+                      maxLines: 2,
                     ),
                   ),
                   Container(
@@ -164,12 +160,12 @@ class _RestaurantOrdersListPageState extends State<RestaurantOrdersListPage> {
                     margin: EdgeInsets.symmetric(vertical: 5),
                     width: double.infinity,
                     child: Text(
-                      'Entregar en: Calle falsa Cra falsa',
+                      'Entregar en: ${order.address!.address ?? ''}',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 13,
                       ),
-                      maxLines: 1,
+                      maxLines: 2,
                     ),
                   ),
                 ],

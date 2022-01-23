@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:delivery/models/address.dart';
 import 'package:delivery/models/product.dart';
+import 'package:delivery/models/user.dart';
 
 Order orderFromJson(String str) => Order.fromJson(json.decode(str));
 
@@ -18,6 +20,8 @@ class Order {
   int? timestamp;
   List<Product> products = [];
   List<Order> toList = [];
+  User? client;
+  Address? address;
 
   Order({
     this.id,
@@ -29,6 +33,8 @@ class Order {
     this.lng,
     this.timestamp,
     required this.products,
+    this.client,
+    this.address,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
@@ -40,8 +46,27 @@ class Order {
     lat: json["lat"] is String ? double.parse(json["lat"]) : json["lat"],
     lng: json["lng"] is String ? double.parse(json["lng"]) : json["lng"],
     timestamp: json["timestamp"] is String ? int.parse(json["timestamp"]) : json["timestamp"],
-    products: List<Product>.from(json["products"].map((p) => Product.fromJson(p))),
+    products: json["products"] != null
+      ? List<Product>.from(json["products"].map((p) => Product.fromJson(p)))
+      : [],
+    client: json["client"] is String
+        ? userFromJson(json['client'])
+        : User.fromJson(json["client"] ?? {}),
+    address: json["address"] is String
+        ? addressFromJson(json['address'])
+        : Address.fromJson(json["address"] ?? {}),
   );
+
+  Order.fromJsonList(List<dynamic> jsonList) {
+    if(jsonList == null){
+      return;
+    }
+
+    jsonList.forEach((item) {
+      Order order = Order.fromJson(item);
+      toList.add(order);
+    });
+  }
 
   Map<String, dynamic> toJson() => {
     "id": id,
@@ -53,5 +78,7 @@ class Order {
     "lng": lng,
     "timestamp": timestamp,
     "products": products,
+    "client": client,
+    "address": address,
   };
 }

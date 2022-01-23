@@ -78,7 +78,7 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
     return Container(
       height: 40,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: _con.gotToNewAddress,
         child: Text(
             'Nueva direccion'
         ),

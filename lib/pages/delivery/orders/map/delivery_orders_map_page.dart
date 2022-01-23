@@ -42,8 +42,8 @@ class _DeliveryOrdersMapPageState extends State<DeliveryOrdersMapPage> {
       mapType: MapType.normal,
       initialCameraPosition: _con.initialPosition,
       onMapCreated: _con.onMapCreated,
-      myLocationButtonEnabled: true,
-      myLocationEnabled: true,
+      //myLocationButtonEnabled: true,
+      //myLocationEnabled: true,
       markers: Set<Marker>.of(_con.markers!.values),
     );
   }

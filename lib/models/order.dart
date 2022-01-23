@@ -49,17 +49,25 @@ class Order {
     lng: json["lng"] is String ? double.parse(json["lng"]) : json["lng"],
     timestamp: json["timestamp"] is String ? int.parse(json["timestamp"]) : json["timestamp"],
     products: json["products"] != null
-      ? List<Product>.from(json["products"].map((p) => Product.fromJson(p)))
+      ? List<Product>.from(json["products"].map((p) => p is Product
+        ? p
+        : Product.fromJson(p)))
       : [],
     client: json["client"] is String
         ? userFromJson(json['client'])
-        : User.fromJson(json["client"] ?? {}),
+        : json["client"]  is User
+          ? json["client"]
+          : User.fromJson(json["client"] ?? {}),
     address: json["address"] is String
         ? addressFromJson(json['address'])
+        : json['address'] is Address
+          ? json["address"]
         : Address.fromJson(json["address"] ?? {}),
     delivery: json["delivery"] is String
         ? userFromJson(json['delivery'])
-        : User.fromJson(json["delivery"] ?? {}),
+        : json['delivery'] is User
+          ? json["delivery"]
+          : User.fromJson(json["delivery"] ?? {}),
   );
 
   Order.fromJsonList(List<dynamic> jsonList) {

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:delivery/models/order.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -19,13 +20,22 @@ class DeliveryOrdersMapController {
   );
   Completer<GoogleMapController> _mapController = Completer();
   BitmapDescriptor? deliveryMarker;
+  BitmapDescriptor? homeMarker;
   Map<MarkerId, Marker>? markers = <MarkerId, Marker>{};
+  Order? order;
 
   Future? init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
-    checkGPS();
+
+    order = Order.fromJson(
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>
+    );
+    print('orden: ${order!.toJson()}');
+
     deliveryMarker = await createMarkerFromAssets('assets/img/delivery2.png');
+    homeMarker = await createMarkerFromAssets('assets/img/home.png');
+    checkGPS();
   }
 
   void addMarker(
@@ -95,7 +105,10 @@ class DeliveryOrdersMapController {
     try {
       await _determinePosition(); // obtener posicion actual y solicitar permisos
       _position = await Geolocator.getLastKnownPosition(); // lat y lng
+
       animateCameraToPosition(_position!.latitude, _position!.longitude);
+
+      // delivery marker
       addMarker(
           'delivery',
           _position!.latitude,
@@ -103,6 +116,16 @@ class DeliveryOrdersMapController {
           'Tu posicion',
           '',
           deliveryMarker!
+      );
+
+      // home marker
+      addMarker(
+          'home',
+          order!.address!.lat!,
+          order!.address!.lng!,
+          'Lugar de entrega',
+          '',
+          homeMarker!
       );
     } catch(e){
       print('Error: $e');

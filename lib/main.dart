@@ -1,3 +1,4 @@
+import 'package:delivery/pages/client/orders/create/client_orders_create_page.dart';
 import 'package:delivery/pages/client/products/list/client_products_list_page.dart';
 import 'package:delivery/pages/client/update/client_update_page.dart';
 import 'package:delivery/pages/delivery/orders/list/delivery_orders_list_page.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         'register': (BuildContext context) => RegisterPage(),
         'client/products/list': (BuildContext context) => ClientProductsListPage(),
         'client/update': (BuildContext context) => ClientUpdatePage(),
+        'client/orders/create': (BuildContext context) => ClientOrdersCreatePage(),
         'delivery/orders/list': (BuildContext context) => DeliveryOrdersListPage(),
         'restaurant/orders/list': (BuildContext context) => RestaurantOrdersListPage(),
         'restaurant/categories/create': (BuildContext context) => RestaurantCategoriesCreatePage(),

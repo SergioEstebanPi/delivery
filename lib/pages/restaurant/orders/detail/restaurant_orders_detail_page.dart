@@ -61,13 +61,9 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
                 ),
                 _textDescription(),
                 _dropDownUsers([]),
-                SizedBox(height: 2,),
                 _textData('Cliente:', '${_con.order!.client!.name} ${_con.order!.client!.lastname}'),
-                SizedBox(height: 2,),
                 _textData('Entregar en:', '${_con.order!.address!.address}'),
-                SizedBox(height: 2,),
                 _textData('Fecha de pedido:', '${_con.order!.timestamp}'),
-                SizedBox(height: 4),
                 _buttonNext(),
               ],
           ),
@@ -113,7 +109,7 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
 
   Widget _dropDownUsers(List<User> users){
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       child: Material(
         elevation: 2.0,
         color: Colors.white,

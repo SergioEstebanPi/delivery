@@ -17,6 +17,7 @@ class ClientProductsCreateController {
     this.context = context;
     this.refresh = refresh;
     selectedProducts = Product.fromJsonList(await _sharedPref.read('order') ?? []).toList;
+    getTotal();
     refresh();
   }
 
@@ -29,16 +30,16 @@ class ClientProductsCreateController {
   }
 
   void addItem(Product product){
-    int index = selectedProducts.indexWhere((p) => p.id == product!.id);
-    selectedProducts[index].quantity = (selectedProducts[index].quantity! + 1)!;
+    int index = selectedProducts.indexWhere((p) => p.id == product.id);
+    selectedProducts[index].quantity = selectedProducts[index].quantity! + 1;
     _sharedPref.save('order', selectedProducts);
     getTotal();
   }
 
   void removeItem(Product product){
     if(product.quantity! > 1){
-      int index = selectedProducts.indexWhere((p) => p.id == product!.id);
-      selectedProducts[index].quantity = (selectedProducts[index].quantity! - 1)!;
+      int index = selectedProducts.indexWhere((p) => p.id == product.id);
+      selectedProducts[index].quantity = selectedProducts[index].quantity! - 1;
       _sharedPref.save('order', selectedProducts);
       getTotal();
     }

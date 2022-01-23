@@ -34,7 +34,7 @@ class ClientProductsDetailController {
       }
       selectedProducts.add(product!);
     } else {
-      selectedProducts[index].quantity = counter;
+      selectedProducts[index].quantity = selectedProducts[index].quantity! + counter;
     }
     _sharedPref.save('order', selectedProducts);
     Fluttertoast.showToast(msg: 'Producto agregado');

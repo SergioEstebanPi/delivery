@@ -50,7 +50,7 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
 
   Widget _iconAdd(){
     return IconButton(
-      onPressed: _con.gotToNewAddress,
+      onPressed: _con.goToNewAddress,
       icon: Icon(
         Icons.add,
         color: Colors.white,
@@ -155,7 +155,7 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
     return Container(
       height: 40,
       child: ElevatedButton(
-        onPressed: _con.gotToNewAddress,
+        onPressed: _con.goToNewAddress,
         child: Text(
             'Nueva direccion'
         ),

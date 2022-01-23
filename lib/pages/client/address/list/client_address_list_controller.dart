@@ -22,9 +22,14 @@ class ClientAddressListController {
     refresh();
   }
 
-  void handleRadioValueChange(int? value){
+  void handleRadioValueChange(int? value) async {
     radioValue = value ?? 0;
+    _sharedPref.save('address', address[value!]);
     print('Valor radio: $value');
+
+    Address a = Address.fromJson(await _sharedPref.read('address') ?? {});
+    print('Se guardo la direccion $a');
+
     refresh!();
   }
 
@@ -33,7 +38,12 @@ class ClientAddressListController {
     return address;
   }
 
-  void gotToNewAddress(){
-    Navigator.pushNamed(context!, 'client/address/create');
+  void goToNewAddress() async {
+    var result = await Navigator.pushNamed(context!, 'client/address/create');
+    if(result != null){
+      if(result == true){
+        refresh!();
+      }
+    }
   }
 }

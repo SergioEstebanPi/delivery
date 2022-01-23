@@ -100,7 +100,7 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
               Container(
                 height: 40,
                 width: 40,
-                margin: EdgeInsets.only(top: 10),
+                margin: EdgeInsets.only(top: 5, bottom: 5),
                 child: FadeInImage(
                   image:  user.image != null
                       ? NetworkImage(user.image!)
@@ -253,7 +253,7 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
     return Container(
       margin: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 20),
       child: ElevatedButton(
-        onPressed: null,
+        onPressed: _con.updateOrder,
         style: ElevatedButton.styleFrom(
             primary: MyColors.primaryColor,
             padding: EdgeInsets.symmetric(vertical: 5),

@@ -28,7 +28,7 @@ class _ClientOrdersCreatePageState extends State<ClientOrdersCreatePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mi order'),
+        title: Text('Mi orden'),
       ),
       bottomNavigationBar: Container(
         height: MediaQuery.of(context).size.height * 0.24,

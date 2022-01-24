@@ -2,6 +2,8 @@ import 'package:delivery/pages/client/address/create/client_address_create_page.
 import 'package:delivery/pages/client/address/list/client_address_list_page.dart';
 import 'package:delivery/pages/client/address/map/client_address_map_page.dart';
 import 'package:delivery/pages/client/orders/create/client_orders_create_page.dart';
+import 'package:delivery/pages/client/orders/list/client_orders_list_page.dart';
+import 'package:delivery/pages/client/orders/map/client_orders_map_page.dart';
 import 'package:delivery/pages/client/products/list/client_products_list_page.dart';
 import 'package:delivery/pages/client/update/client_update_page.dart';
 import 'package:delivery/pages/delivery/orders/list/delivery_orders_list_page.dart';
@@ -37,6 +39,8 @@ class MyApp extends StatelessWidget {
         'client/address/list': (BuildContext context) => ClientAddressListPage(),
         'client/address/create': (BuildContext context) => ClientAddressCreatePage(),
         'client/address/map': (BuildContext context) => ClientAddressMapPage(),
+        'client/orders/list': (BuildContext context) => ClientOrdersListPage(),
+        'client/orders/map': (BuildContext context) => ClientOrdersMapPage(),
         'delivery/orders/list': (BuildContext context) => DeliveryOrdersListPage(),
         'delivery/orders/map': (BuildContext context) => DeliveryOrdersMapPage(),
         'restaurant/orders/list': (BuildContext context) => RestaurantOrdersListPage(),

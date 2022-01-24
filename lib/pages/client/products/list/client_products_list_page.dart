@@ -316,11 +316,12 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
             )
           ),
           ListTile(
-            onTap: _con.goToUpdatepage,
+            onTap: _con.goToUpdatePage,
             title: Text('Editar perfil'),
             trailing: Icon(Icons.edit_outlined),
           ),
           ListTile(
+            onTap: _con.goToOrdersList,
             title: Text('Mis pedidos'),
             trailing: Icon(Icons.shopping_cart_outlined),
           ),

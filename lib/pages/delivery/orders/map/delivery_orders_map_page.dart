@@ -201,7 +201,7 @@ class _DeliveryOrdersMapPageState extends State<DeliveryOrdersMapPage> {
     return Container(
       margin: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 10),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: _con.updateToDelivered,
         style: ElevatedButton.styleFrom(
             primary: MyColors.primaryColor,
             padding: EdgeInsets.symmetric(vertical: 5),

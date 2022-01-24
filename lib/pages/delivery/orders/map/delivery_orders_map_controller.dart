@@ -2,7 +2,12 @@ import 'dart:async';
 
 import 'package:delivery/api/environment.dart';
 import 'package:delivery/models/order.dart';
+import 'package:delivery/models/response_api.dart';
+import 'package:delivery/models/user.dart';
+import 'package:delivery/provider/orders_provider.dart';
 import 'package:delivery/utils/my_colors.dart';
+import 'package:delivery/utils/my_snackbar.dart';
+import 'package:delivery/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -31,10 +36,17 @@ class DeliveryOrdersMapController {
   Set<Polyline> polylines = Set();
   List<LatLng> points = [];
   StreamSubscription? _positionStream;
+  User? user;
+  SharedPref _sharedPref = SharedPref();
+  OrdersProvider _ordersProvider = OrdersProvider();
+  double? _distanceBetween;
 
   Future? init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
+
+    user = User.fromJson(await _sharedPref.read('user'));
+    _ordersProvider.init(context, sessionUser: user);
 
     order = Order.fromJson(
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>
@@ -44,6 +56,32 @@ class DeliveryOrdersMapController {
     deliveryMarker = await createMarkerFromAssets('assets/img/delivery2.png');
     homeMarker = await createMarkerFromAssets('assets/img/home.png');
     checkGPS();
+  }
+
+  void isCloseToDeliveryPosition(){
+    _distanceBetween = Geolocator.distanceBetween(
+        _position!.latitude,
+        _position!.longitude,
+        order!.address!.lat!,
+        order!.address!.lng!
+    );
+    print('Distancia del cliente: $_distanceBetween');
+  }
+
+  void updateToDelivered() async {
+    if(_distanceBetween != null &&_distanceBetween! <= 200){ // distancia en metros
+      ResponseApi responseApi = await _ordersProvider.updateToDelivered(order!);
+      if(responseApi.success){
+        Fluttertoast.showToast(msg: responseApi.message, toastLength: Toast.LENGTH_LONG);
+        Navigator.pushNamedAndRemoveUntil(
+            context!,
+            'delivery/orders/list',
+                (route) => false
+        );
+      }
+    } else {
+      MySnackbar.show(context!, 'Debes estar mas cerca a la posicion de entrega');
+    }
   }
 
   Future<void> setPolylines(LatLng from, LatLng to) async {
@@ -186,6 +224,8 @@ class DeliveryOrdersMapController {
         );
 
         animateCameraToPosition(_position!.latitude, _position!.longitude);
+        isCloseToDeliveryPosition();
+
         refresh!();
 
       });

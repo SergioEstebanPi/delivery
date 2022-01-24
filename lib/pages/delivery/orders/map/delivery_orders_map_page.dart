@@ -162,7 +162,7 @@ class _DeliveryOrdersMapPageState extends State<DeliveryOrdersMapPage> {
               color: Colors.grey[200],
             ),
             child: IconButton(
-              onPressed: null,
+              onPressed: _con.call,
               icon: Icon(
                 Icons.phone,
                 color: Colors.black,

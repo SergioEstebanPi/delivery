@@ -5,10 +5,12 @@ import 'package:delivery/models/order.dart';
 import 'package:delivery/utils/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as location;
+import 'package:url_launcher/url_launcher.dart';
 
 class DeliveryOrdersMapController {
 
@@ -161,6 +163,17 @@ class DeliveryOrdersMapController {
 
     } catch(e){
       print('Error: $e');
+    }
+  }
+  
+  void call() async {
+    String url = 'tel:${order!.client!.phone}';
+    if (order!.client!.phone != null && await canLaunch(url)) {
+      print('llamando a $url');
+      launch(url);
+    } else {
+      Fluttertoast.showToast(msg: 'El usuario no posee numero registrado');
+      throw 'Could not launch $url';
     }
   }
 

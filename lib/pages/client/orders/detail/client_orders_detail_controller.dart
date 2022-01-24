@@ -31,26 +31,11 @@ class ClientOrdersCreateController {
     _usersProvider.init(context, sessionUser: user);
     _ordersProvider.init(context, sessionUser: user);
     getTotal();
-    getUsers();
     refresh();
   }
 
-  void updateOrder() async {
-    if(order!.status == 'DESPACHADO'){
-      ResponseApi responseApi = await _ordersProvider.updateToOnTheWay(order!);
-      //MySnackbar.show(context!, responseApi.message);
-      Fluttertoast.showToast(msg: responseApi.message, toastLength: Toast.LENGTH_LONG);
-      if(responseApi.success){
-        Navigator.pushNamed(context!, 'delivery/orders/map', arguments: order!.toJson());
-      }
-    } else {
-      Navigator.pushNamed(context!, 'delivery/orders/map', arguments: order!.toJson());
-    }
-  }
-
-  void getUsers() async {
-    users = await _usersProvider.getDeliveryMen();
-    refresh!();
+  void updateOrder() {
+    Navigator.pushNamed(context!, 'client/orders/map', arguments: order!.toJson());
   }
 
   void getTotal(){

@@ -43,7 +43,9 @@ class _DeliveryOrdersMapPageState extends State<DeliveryOrdersMapPage> {
               children: [
                 _buttonCenterPosition(),
                 Spacer(),
-                _cardOrderInfo(),
+                _con.order != null
+                    ? _cardOrderInfo()
+                    : Container(),
               ],
             ),
           ),
@@ -280,10 +282,8 @@ class _DeliveryOrdersMapPageState extends State<DeliveryOrdersMapPage> {
   }
 
   void refresh(){
-    if(!mounted){
-      setState(() {
+    setState(() {
 
-      });
-    }
+    });
   }
 }

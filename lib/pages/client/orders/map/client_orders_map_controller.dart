@@ -68,40 +68,6 @@ class ClientOrdersMapController {
     print('Distancia del cliente: $_distanceBetween');
   }
 
-  void launchWaze() async {
-    var lat = order!.address!.lat.toString();
-    var lng = order!.address!.lng.toString();
-    var url = 'waze://?ll=${lat.toString()},${lng.toString()}';
-    var fallbackUrl =
-        'https://waze.com/ul?ll=${lat.toString()},${lng.toString()}&navigate=yes';
-    try {
-      bool launched =
-      await launch(url, forceSafariVC: false, forceWebView: false);
-      if (!launched) {
-        await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
-      }
-    } catch (e) {
-      await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
-    }
-  }
-
-  void launchGoogleMaps() async {
-    var lat = order!.address!.lat.toString();
-    var lng = order!.address!.lng.toString();
-    var url = 'google.navigation:q=${lat.toString()},${lng.toString()}';
-    var fallbackUrl =
-        'https://www.google.com/maps/search/?api=1&query=${lat.toString()},${lng.toString()}';
-    try {
-      bool launched =
-      await launch(url, forceSafariVC: false, forceWebView: false);
-      if (!launched) {
-        await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
-      }
-    } catch (e) {
-      await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
-    }
-  }
-
   void updateToDelivered() async {
     if(_distanceBetween != null &&_distanceBetween! <= 200){ // distancia en metros
       ResponseApi responseApi = await _ordersProvider.updateToDelivered(order!);
@@ -109,7 +75,7 @@ class ClientOrdersMapController {
         Fluttertoast.showToast(msg: responseApi.message, toastLength: Toast.LENGTH_LONG);
         Navigator.pushNamedAndRemoveUntil(
             context!,
-            'delivery/orders/list',
+            'client/orders/list',
                 (route) => false
         );
       }
@@ -270,8 +236,8 @@ class ClientOrdersMapController {
   }
   
   void call() async {
-    String url = 'tel:${order!.client!.phone}';
-    if (order!.client!.phone != null && await canLaunch(url)) {
+    String url = 'tel:${order!.delivery!.phone}';
+    if (order!.delivery!.phone != null && await canLaunch(url)) {
       print('llamando a $url');
       launch(url);
     } else {

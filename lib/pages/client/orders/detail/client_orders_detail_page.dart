@@ -52,7 +52,7 @@ class _ClientOrdersDetailPageState extends State<ClientOrdersDetailPage> {
         ],
       ),
       bottomNavigationBar: Container(
-        height: MediaQuery.of(context).size.height * 0.5,
+        height: MediaQuery.of(context).size.height * 0.4,
         child: SingleChildScrollView(
           child: Column(
               children: [
@@ -62,9 +62,9 @@ class _ClientOrdersDetailPageState extends State<ClientOrdersDetailPage> {
                   indent: 30, // margen izquierdo
                 ),
                 SizedBox(height: 10,),
-                _textData('Cliente:', _con.order != null
-                    ? '${_con.order!.client!.name} ${_con.order!.client!.lastname}'
-                    : ''),
+                _textData('Repartidor:', _con.order != null &&_con.order!.delivery!.id != null
+                    ? '${_con.order!.delivery!.name} ${_con.order!.delivery!.lastname}'
+                    : 'No asignado'),
                 _textData('Entregar en:', _con.order != null
                     ? '${_con.order!.address!.address}'
                     : ''),
@@ -74,7 +74,7 @@ class _ClientOrdersDetailPageState extends State<ClientOrdersDetailPage> {
                         ? '${RelativeTimeUtil.getRelativeTime(_con.order!.timestamp ?? 0)}'
                         : ''
                 ),
-               _con.order!.status != 'ENTREGADO'
+                _con.order != null && _con.order!.status == 'EN CAMINO'
                   ? _buttonNext()
                   : Container(),
               ],
@@ -163,9 +163,7 @@ class _ClientOrdersDetailPageState extends State<ClientOrdersDetailPage> {
       child: ElevatedButton(
         onPressed: _con.updateOrder,
         style: ElevatedButton.styleFrom(
-            primary: _con.order!.status == 'DESPACHADO'
-                ? Colors.blue
-                : Colors.green,
+            primary: Colors.blue,
             padding: EdgeInsets.symmetric(vertical: 5),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12)
@@ -179,9 +177,7 @@ class _ClientOrdersDetailPageState extends State<ClientOrdersDetailPage> {
                 height: 40,
                 alignment: Alignment.center,
                 child: Text(
-                  _con.order!.status == 'DESPACHADO'
-                    ? 'INICIAR ENTREGA'
-                    : 'IR AL MAPA',
+                  'SEGUIR ENTREGA',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -196,7 +192,7 @@ class _ClientOrdersDetailPageState extends State<ClientOrdersDetailPage> {
                 height: 30,
                 child: Icon(
                   Icons.directions_car,
-                  color: Colors.green,
+                  color: Colors.white,
                   size: 30,
                 ),
               ),

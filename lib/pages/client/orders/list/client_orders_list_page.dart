@@ -1,6 +1,6 @@
 import 'package:delivery/models/order.dart';
 import 'package:delivery/pages/client/orders/list/client_orders.list_controller.dart';
-import 'package:delivery/pages/delivery/orders/list/delivery.orders.list_controller.dart';
+import 'package:delivery/pages/delivery/orders/list/delivery_orders.list_controller.dart';
 import 'package:delivery/utils/my_colors.dart';
 import 'package:delivery/widgets/no_data_widget.dart';
 import 'package:flutter/material.dart';
@@ -145,7 +145,9 @@ class _ClientOrdersListPageState extends State<ClientOrdersListPage> {
                       margin: EdgeInsets.symmetric(vertical: 5),
                       width: double.infinity,
                       child: Text(
-                        'Cliente: ${order.client!.name ?? ''} ${order.client!.lastname ?? ''}',
+                        order.delivery!.id == null
+                          ? 'Repartidor: No asignado'
+                          : 'Repartidor: ${order.delivery!.name ?? ''} ${order.delivery!.lastname ?? ''}',
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           fontSize: 13,

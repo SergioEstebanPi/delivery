@@ -1,5 +1,6 @@
 import 'package:delivery/models/order.dart';
 import 'package:delivery/models/user.dart';
+import 'package:delivery/pages/client/orders/detail/client_orders_detail_page.dart';
 import 'package:delivery/pages/delivery/orders/detail/delivery_orders_detail_page.dart';
 import 'package:delivery/pages/restaurant/orders/detail/restaurant_orders_detail_page.dart';
 import 'package:delivery/provider/orders_provider.dart';
@@ -40,7 +41,7 @@ class ClientOrdersListController {
   void openBottomSheet(Order order) async {
     var isUpdated = await showMaterialModalBottomSheet(
         context: context!,
-        builder: (context) => DeliveryOrdersDetailPage(
+        builder: (context) => ClientOrdersDetailPage(
             order: order
         )
     );

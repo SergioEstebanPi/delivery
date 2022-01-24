@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:delivery/api/environment.dart';
 import 'package:delivery/models/order.dart';
+import 'package:delivery/utils/my_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -23,6 +26,8 @@ class DeliveryOrdersMapController {
   BitmapDescriptor? homeMarker;
   Map<MarkerId, Marker>? markers = <MarkerId, Marker>{};
   Order? order;
+  Set<Polyline> polylines = Set();
+  List<LatLng> points = [];
 
   Future? init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -36,6 +41,27 @@ class DeliveryOrdersMapController {
     deliveryMarker = await createMarkerFromAssets('assets/img/delivery2.png');
     homeMarker = await createMarkerFromAssets('assets/img/home.png');
     checkGPS();
+  }
+
+  Future<void> setPolylines(LatLng from, LatLng to) async {
+    PointLatLng pointFrom = PointLatLng(from.latitude, from.longitude);
+    PointLatLng pointTo = PointLatLng(to.latitude, to.longitude);
+    PolylineResult result = await PolylinePoints()
+        .getRouteBetweenCoordinates(Environment.API_KEY_MAPS, pointFrom, pointTo);
+    
+    for(PointLatLng point in result.points){
+      points.add(LatLng(point.latitude, point.longitude));
+    }
+    Polyline polyline = Polyline(
+        polylineId: PolylineId('poly'),
+        color: MyColors.primaryColor,
+        points: points,
+        width: 6,
+    );
+
+    polylines.add(polyline);
+
+    refresh!();
   }
 
   void addMarker(
@@ -127,6 +153,12 @@ class DeliveryOrdersMapController {
           '',
           homeMarker!
       );
+
+      LatLng from = LatLng(_position!.latitude, _position!.longitude);
+      LatLng to = LatLng(order!.address!.lat!, order!.address!.lng!);
+
+      setPolylines(from, to);
+
     } catch(e){
       print('Error: $e');
     }

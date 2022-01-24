@@ -76,6 +76,7 @@ class _DeliveryOrdersMapPageState extends State<DeliveryOrdersMapPage> {
       //myLocationButtonEnabled: true,
       //myLocationEnabled: true,
       markers: Set<Marker>.of(_con.markers!.values),
+      polylines: _con.polylines,
     );
   }
 
@@ -101,12 +102,12 @@ class _DeliveryOrdersMapPageState extends State<DeliveryOrdersMapPage> {
       child: Column(
         children: [
           _listTileAddress(
-              _con.order!.address!.neighborhood!,
+              _con.order != null ? _con.order!.address!.neighborhood! : '',
               'Barrio',
               Icons.my_location
           ),
           _listTileAddress(
-              _con.order!.address!.address!,
+              _con.order != null ? _con.order!.address!.address!: '',
               'Direccion',
               Icons.location_on
           ),
@@ -131,7 +132,7 @@ class _DeliveryOrdersMapPageState extends State<DeliveryOrdersMapPage> {
             height: 50,
             width: 50,
             child: FadeInImage(
-              image: _con.order!.client!.image != null
+              image:  _con.order != null && _con.order!.client!.image != null
                   ? NetworkImage(_con.order!.client!.image!)
                   : AssetImage('assets/img/no-image.png') as ImageProvider,
               fit: BoxFit.cover,
@@ -144,7 +145,9 @@ class _DeliveryOrdersMapPageState extends State<DeliveryOrdersMapPage> {
           Container(
             margin: EdgeInsets.only(left: 10),
             child: Text(
-              '${_con.order!.client!.name!} ${_con.order!.client!.lastname!}',
+              _con.order != null
+                  ? '${_con.order!.client!.name!} ${_con.order!.client!.lastname!}'
+                : '',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 16,

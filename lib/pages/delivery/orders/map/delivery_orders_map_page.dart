@@ -47,6 +47,16 @@ class _DeliveryOrdersMapPageState extends State<DeliveryOrdersMapPage> {
               ],
             ),
           ),
+          Positioned(
+            top: 50,
+            left: 15,
+            child: _iconGoogleMaps(),
+          ),
+          Positioned(
+            top: 100,
+            left: 15,
+            child: _iconWaze(),
+          ),
         ],
       ),
     );
@@ -177,6 +187,32 @@ class _DeliveryOrdersMapPageState extends State<DeliveryOrdersMapPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _iconGoogleMaps(){
+    return GestureDetector(
+      onTap: _con.launchGoogleMaps,
+      child: Container(
+        child: Image.asset(
+          'assets/img/google_maps.png',
+          height: 35,
+          width: 35,
+        ),
+      ),
+    );
+  }
+
+  Widget _iconWaze(){
+    return GestureDetector(
+      onTap: _con.launchWaze,
+      child: Container(
+        child: Image.asset(
+          'assets/img/waze.png',
+          height: 35,
+          width: 35,
+        ),
       ),
     );
   }

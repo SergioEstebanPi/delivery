@@ -180,7 +180,7 @@ class _DeliveryOrdersDetailPageState extends State<DeliveryOrdersDetailPage> {
                 child: Text(
                   _con.order!.status == 'DESPACHADO'
                     ? 'INICIAR ENTREGA'
-                    : 'IR AL MAP',
+                    : 'IR AL MAPA',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

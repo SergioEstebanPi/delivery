@@ -30,6 +30,7 @@ class DeliveryOrdersMapController {
   Order? order;
   Set<Polyline> polylines = Set();
   List<LatLng> points = [];
+  StreamSubscription? _positionStream;
 
   Future? init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -129,6 +130,10 @@ class DeliveryOrdersMapController {
     _mapController.complete(controller);
   }
 
+  void dispose(){
+    _positionStream!.cancel();
+  }
+
   void updateLocation() async {
     try {
       await _determinePosition(); // obtener posicion actual y solicitar permisos
@@ -160,6 +165,30 @@ class DeliveryOrdersMapController {
       LatLng to = LatLng(order!.address!.lat!, order!.address!.lng!);
 
       setPolylines(from, to);
+
+
+      LocationSettings? locationSettings = LocationSettings(
+        accuracy: LocationAccuracy.best,
+        distanceFilter: 1
+      );
+      _positionStream = Geolocator.getPositionStream(
+        locationSettings: locationSettings,
+      ).listen((Position position) {
+        _position = position; // assign the new position
+        // move the delivery marker
+        addMarker(
+            'delivery',
+            _position!.latitude,
+            _position!.longitude,
+            'Tu posicion',
+            '',
+            deliveryMarker!
+        );
+
+        animateCameraToPosition(_position!.latitude, _position!.longitude);
+        refresh!();
+
+      });
 
     } catch(e){
       print('Error: $e');

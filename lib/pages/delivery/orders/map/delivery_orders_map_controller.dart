@@ -97,11 +97,7 @@ class DeliveryOrdersMapController {
       print('Enviando posicion: ${newPosition}');
       if(socket != null){
         socket!.emit('position', newPosition);
-      } else {
-        print('socket esta nulo');
       }
-    } else {
-      print('Nulo en $_position $order');
     }
   }
 

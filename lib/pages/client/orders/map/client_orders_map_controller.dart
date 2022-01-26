@@ -16,6 +16,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as location;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ClientOrdersMapController {
 
@@ -40,10 +41,14 @@ class ClientOrdersMapController {
   SharedPref _sharedPref = SharedPref();
   OrdersProvider _ordersProvider = OrdersProvider();
   double? _distanceBetween;
+  IO.Socket? socket;
 
   Future? init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
+
+    deliveryMarker = await createMarkerFromAssets('assets/img/delivery2.png');
+    homeMarker = await createMarkerFromAssets('assets/img/home.png');
 
     user = User.fromJson(await _sharedPref.read('user'));
     _ordersProvider.init(context, sessionUser: user);
@@ -51,10 +56,44 @@ class ClientOrdersMapController {
     order = Order.fromJson(
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>
     );
-    print('orden: ${order!.toJson()}');
 
-    deliveryMarker = await createMarkerFromAssets('assets/img/delivery2.png');
-    homeMarker = await createMarkerFromAssets('assets/img/home.png');
+    try {
+      socket = IO.io('http://${Environment.API_DELIVERY}/orders/delivery',
+          <String, dynamic>{
+            'transports': ['websocket'],
+            'autoConnect': false
+          }
+      );
+      socket!.open();
+      socket!.on('connect', (_) {
+        print('connect');
+        if(socket!.connected){
+          if(order != null){
+            socket!.on('position/${order!.id}', (position) {
+              print('POSICION RECIBIDA: ${position}');
+              addMarker(
+                  'delivery',
+                  (position['lat'] is String ? double.parse(position['lat']) : position['lat']),
+                  (position['lng'] is String ? double.parse(position['lng']) : position['lng']),
+                  'Tu delivery',
+                  '',
+                  deliveryMarker!
+              );
+            });
+          }
+          Fluttertoast.showToast(msg: 'Socket conectado');
+        } else {
+          Fluttertoast.showToast(msg: 'Error al conectar socket');
+        }
+      });
+      //socket.on('event', (data) => print(data));
+      //socket.onDisconnect((_) => print('disconnect'));
+      //socket.on('fromServer', (_) => print(_));
+    } catch(e){
+      Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG);
+    }
+
+    print('orden: ${order!.toJson()}');
     checkGPS();
   }
 

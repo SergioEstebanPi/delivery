@@ -201,8 +201,10 @@ class _ClientOrdersMapPageState extends State<ClientOrdersMapPage> {
   }
 
   void refresh(){
-    setState(() {
+    if(mounted){
+      setState(() {
 
-    });
+      });
+    }
   }
 }

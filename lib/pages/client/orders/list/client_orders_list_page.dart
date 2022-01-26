@@ -56,8 +56,8 @@ class _ClientOrdersListPageState extends State<ClientOrdersListPage> {
           children: _con.categories.map((String category) {
             return FutureBuilder(
                 future: _con.getOrders(category),
-                builder: (context, AsyncSnapshot<List<Order>> snapshot) {
-                  if(snapshot.hasData){
+                builder: (context, AsyncSnapshot<List<Order>?> snapshot) {
+                  if(snapshot != null && snapshot.hasData){
                     if(snapshot.data!.length > 0){
                       return ListView.builder(
                         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),

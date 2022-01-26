@@ -71,14 +71,11 @@ class ClientOrdersMapController {
           if(order != null){
             socket!.on('position/${order!.id}', (position) {
               print('POSICION RECIBIDA: ${position}');
-              addMarker(
-                  'delivery',
-                  (position['lat'] is String ? double.parse(position['lat']) : position['lat']),
-                  (position['lng'] is String ? double.parse(position['lng']) : position['lng']),
-                  'Tu delivery',
-                  '',
-                  deliveryMarker!
-              );
+
+              order!.lat = (position['lat'] is String ? double.parse(position['lat']) : position['lat']);
+              order!.lng = (position['lng'] is String ? double.parse(position['lng']) : position['lng']);
+              updateLocation();
+
             });
           }
           Fluttertoast.showToast(msg: 'Socket conectado');
@@ -208,25 +205,25 @@ class ClientOrdersMapController {
   }
 
   void dispose(){
-    _positionStream!.cancel();
+    if(_positionStream != null){
+      _positionStream!.cancel();
+    }
   }
 
   void updateLocation() async {
     try {
       await _determinePosition(); // obtener posicion actual y solicitar permisos
-      _position = await Geolocator.getLastKnownPosition(); // lat y lng
+      //_position = await Geolocator.getLastKnownPosition(); // lat y lng
 
-      animateCameraToPosition(_position!.latitude, _position!.longitude);
-
-      // delivery marker
       addMarker(
           'delivery',
-          _position!.latitude,
-          _position!.longitude,
-          'Tu posicion',
+          order!.lat!,
+          order!.lng!,
+          'Repartidor',
           '',
           deliveryMarker!
       );
+      animateCameraToPosition(order!.lat!, order!.lng!);
 
       // home marker
       addMarker(
@@ -238,12 +235,12 @@ class ClientOrdersMapController {
           homeMarker!
       );
 
-      LatLng from = LatLng(_position!.latitude, _position!.longitude);
+      LatLng from = LatLng(order!.lat!, order!.lng!);
       LatLng to = LatLng(order!.address!.lat!, order!.address!.lng!);
 
       setPolylines(from, to);
 
-
+      /*
       LocationSettings? locationSettings = LocationSettings(
         accuracy: LocationAccuracy.best,
         distanceFilter: 1
@@ -253,22 +250,15 @@ class ClientOrdersMapController {
       ).listen((Position position) {
         _position = position; // assign the new position
         // move the delivery marker
-        addMarker(
-            'delivery',
-            _position!.latitude,
-            _position!.longitude,
-            'Tu posicion',
-            '',
-            deliveryMarker!
-        );
 
-        animateCameraToPosition(_position!.latitude, _position!.longitude);
         isCloseToDeliveryPosition();
 
         refresh!();
 
       });
+      */
 
+      refresh!();
     } catch(e){
       print('Error: $e');
     }

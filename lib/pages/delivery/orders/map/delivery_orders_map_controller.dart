@@ -70,6 +70,7 @@ class DeliveryOrdersMapController {
       socket!.on('connect', (_) {
         print('connect');
         if(socket!.connected){
+          saveLocation();
           emitPosition();
           Fluttertoast.showToast(msg: 'Socket conectado');
         } else {
@@ -85,6 +86,14 @@ class DeliveryOrdersMapController {
 
     print('orden: ${order!.toJson()}');
     checkGPS();
+  }
+
+  void saveLocation() async {
+    if(order != null && _position != null){
+      order!.lat = _position!.latitude;
+      order!.lng = _position!.longitude;
+      await _ordersProvider.updateToLatLng(order!);
+    }
   }
 
   void emitPosition(){
@@ -267,7 +276,8 @@ class DeliveryOrdersMapController {
       await _determinePosition(); // obtener posicion actual y solicitar permisos
       _position = await Geolocator.getLastKnownPosition(); // lat y lng
 
-      emitPosition();
+      saveLocation();
+      //emitPosition();
 
       animateCameraToPosition(_position!.latitude, _position!.longitude);
 

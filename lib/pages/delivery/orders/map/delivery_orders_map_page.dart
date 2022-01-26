@@ -66,7 +66,7 @@ class _DeliveryOrdersMapPageState extends State<DeliveryOrdersMapPage> {
 
   Widget _buttonCenterPosition(){
     return GestureDetector(
-      onTap: (){},
+      onTap: _con.emitPosition,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20,),
         alignment: Alignment.centerRight,

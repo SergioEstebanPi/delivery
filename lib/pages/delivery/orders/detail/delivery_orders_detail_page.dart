@@ -73,7 +73,7 @@ class _DeliveryOrdersDetailPageState extends State<DeliveryOrdersDetailPage> {
                         ? '${RelativeTimeUtil.getRelativeTime(_con.order!.timestamp ?? 0)}'
                         : ''
                 ),
-               _con.order!.status != 'ENTREGADO'
+                _con.order != null && _con.order!.status != 'ENTREGADO'
                   ? _buttonNext()
                   : Container(),
               ],

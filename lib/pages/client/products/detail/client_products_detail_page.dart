@@ -108,7 +108,7 @@ class _ClientProductsDetailPageState extends State<ClientProductsDetailPage> {
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.only(right: 30, left: 30, top: 30),
       child: Text(
-        _con.product!.name ?? '',
+        _con.product != null ? _con.product!.name ?? '' : '',
         style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold
@@ -122,7 +122,7 @@ class _ClientProductsDetailPageState extends State<ClientProductsDetailPage> {
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.only(right: 30, left: 30, top: 15),
       child: Text(
-        _con.product!.description ?? '',
+        _con.product != null ? _con.product!.description ?? '' : '',
         style: TextStyle(
             fontSize: 13,
             color: Colors.grey

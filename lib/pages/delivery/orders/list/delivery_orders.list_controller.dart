@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:delivery/utils/my_snackbar.dart';
 import 'package:delivery/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class DeliveryOrdersListController {
@@ -32,8 +33,11 @@ class DeliveryOrdersListController {
     refresh();
   }
 
-  Future<List<Order>> getOrders(String status) async {
-    return await _ordersProvider.getByDeliveryAndStatus(user!.id!, status);
+  Future<List<Order>?> getOrders(String status) async {
+    if(user != null){
+      return await _ordersProvider.getByDeliveryAndStatus(user!.id!, status);
+    }
+    return [];
   }
 
   void openBottomSheet(Order order) async {

@@ -16,6 +16,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as location;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class DeliveryOrdersMapController {
 
@@ -40,81 +41,135 @@ class DeliveryOrdersMapController {
   SharedPref _sharedPref = SharedPref();
   OrdersProvider _ordersProvider = OrdersProvider();
   double? _distanceBetween;
+  IO.Socket? socket;
 
   Future? init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
 
-    user = User.fromJson(await _sharedPref.read('user'));
-    _ordersProvider.init(context, sessionUser: user);
+    deliveryMarker = await createMarkerFromAssets('assets/img/delivery2.png');
+    homeMarker = await createMarkerFromAssets('assets/img/home.png');
 
     order = Order.fromJson(
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>
     );
-    print('orden: ${order!.toJson()}');
 
-    deliveryMarker = await createMarkerFromAssets('assets/img/delivery2.png');
-    homeMarker = await createMarkerFromAssets('assets/img/home.png');
+    user = User.fromJson(await _sharedPref.read('user'));
+    _ordersProvider.init(context, sessionUser: user);
+
+    String namespace = '/orders/delivery';
+    Fluttertoast.showToast(msg: 'inicia conexion con servidor socket io');
+    try {
+      socket = IO.io('http://${Environment.API_DELIVERY}/orders/delivery',
+        <String, dynamic>{
+          'transports': ['websocket'],
+          'autoConnect': false
+        }
+      );
+      socket!.open();
+      socket!.on('connect', (_) {
+        print('connect');
+        if(socket!.connected){
+          emitPosition();
+          Fluttertoast.showToast(msg: 'Socket conectado');
+        } else {
+          Fluttertoast.showToast(msg: 'Error al conectar socket');
+        }
+      });
+      //socket.on('event', (data) => print(data));
+      //socket.onDisconnect((_) => print('disconnect'));
+      //socket.on('fromServer', (_) => print(_));
+    } catch(e){
+      Fluttertoast.showToast(msg: e.toString(), toastLength: Toast.LENGTH_LONG);
+    }
+
+    print('orden: ${order!.toJson()}');
     checkGPS();
   }
 
+  void emitPosition(){
+    if(_position != null && order != null){
+      var newPosition = {
+        'id_order': order!.id,
+        'lat': _position!.latitude,
+        'lng': _position!.longitude
+      };
+      print('Enviando posicion: ${newPosition}');
+      if(socket != null){
+        socket!.emit('position', newPosition);
+      } else {
+        print('socket esta nulo');
+      }
+    } else {
+      print('Nulo en $_position $order');
+    }
+  }
+
   void isCloseToDeliveryPosition(){
-    _distanceBetween = Geolocator.distanceBetween(
-        _position!.latitude,
-        _position!.longitude,
-        order!.address!.lat!,
-        order!.address!.lng!
-    );
-    print('Distancia del cliente: $_distanceBetween');
+    if(_distanceBetween != null){
+      _distanceBetween = Geolocator.distanceBetween(
+          _position!.latitude,
+          _position!.longitude,
+          order!.address!.lat!,
+          order!.address!.lng!
+      );
+      print('Distancia del cliente: $_distanceBetween');
+    }
   }
 
   void launchWaze() async {
-    var lat = order!.address!.lat.toString();
-    var lng = order!.address!.lng.toString();
-    var url = 'waze://?ll=${lat.toString()},${lng.toString()}';
-    var fallbackUrl =
-        'https://waze.com/ul?ll=${lat.toString()},${lng.toString()}&navigate=yes';
-    try {
-      bool launched =
-      await launch(url, forceSafariVC: false, forceWebView: false);
-      if (!launched) {
+    if(order != null) {
+      var lat = order!.address!.lat.toString();
+      var lng = order!.address!.lng.toString();
+      var url = 'waze://?ll=${lat.toString()},${lng.toString()}';
+      var fallbackUrl =
+          'https://waze.com/ul?ll=${lat.toString()},${lng.toString()}&navigate=yes';
+      try {
+        bool launched =
+        await launch(url, forceSafariVC: false, forceWebView: false);
+        if (!launched) {
+          await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
+        }
+      } catch (e) {
         await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
       }
-    } catch (e) {
-      await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
     }
   }
 
   void launchGoogleMaps() async {
-    var lat = order!.address!.lat.toString();
-    var lng = order!.address!.lng.toString();
-    var url = 'google.navigation:q=${lat.toString()},${lng.toString()}';
-    var fallbackUrl =
-        'https://www.google.com/maps/search/?api=1&query=${lat.toString()},${lng.toString()}';
-    try {
-      bool launched =
-      await launch(url, forceSafariVC: false, forceWebView: false);
-      if (!launched) {
+    if(order != null){
+      var lat = order!.address!.lat.toString();
+      var lng = order!.address!.lng.toString();
+      var url = 'google.navigation:q=${lat.toString()},${lng.toString()}';
+      var fallbackUrl =
+          'https://www.google.com/maps/search/?api=1&query=${lat.toString()},${lng.toString()}';
+      try {
+        bool launched =
+        await launch(url, forceSafariVC: false, forceWebView: false);
+        if (!launched) {
+          await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
+        }
+      } catch (e) {
         await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
       }
-    } catch (e) {
-      await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
     }
   }
 
   void updateToDelivered() async {
-    if(_distanceBetween != null &&_distanceBetween! <= 200){ // distancia en metros
-      ResponseApi responseApi = await _ordersProvider.updateToDelivered(order!);
-      if(responseApi.success){
-        Fluttertoast.showToast(msg: responseApi.message, toastLength: Toast.LENGTH_LONG);
-        Navigator.pushNamedAndRemoveUntil(
-            context!,
-            'delivery/orders/list',
-                (route) => false
-        );
+    if(_distanceBetween != null){
+      if(_distanceBetween != null &&_distanceBetween! <= 200){ // distancia en metros
+        ResponseApi responseApi = await _ordersProvider.updateToDelivered(order!);
+        if(responseApi.success){
+          Fluttertoast.showToast(msg: responseApi.message, toastLength: Toast.LENGTH_LONG);
+          Navigator.pushNamedAndRemoveUntil(
+              context!,
+              'delivery/orders/list',
+                  (route) => false
+          );
+        }
+      } else {
+        MySnackbar.show(context!, 'Debes estar mas cerca a la posicion de entrega');
       }
-    } else {
-      MySnackbar.show(context!, 'Debes estar mas cerca a la posicion de entrega');
     }
   }
 
@@ -203,13 +258,20 @@ class DeliveryOrdersMapController {
   }
 
   void dispose(){
-    _positionStream!.cancel();
+    if(_positionStream != null){
+      _positionStream!.cancel();
+    }
+    if(socket != null){
+      socket!.disconnect();
+    }
   }
 
   void updateLocation() async {
     try {
       await _determinePosition(); // obtener posicion actual y solicitar permisos
       _position = await Geolocator.getLastKnownPosition(); // lat y lng
+
+      emitPosition();
 
       animateCameraToPosition(_position!.latitude, _position!.longitude);
 
@@ -247,6 +309,9 @@ class DeliveryOrdersMapController {
         locationSettings: locationSettings,
       ).listen((Position position) {
         _position = position; // assign the new position
+
+        emitPosition();
+
         // move the delivery marker
         addMarker(
             'delivery',

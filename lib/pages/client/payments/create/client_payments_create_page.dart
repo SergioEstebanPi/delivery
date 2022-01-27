@@ -1,7 +1,9 @@
+import 'package:delivery/models/mercado_pago_document_type.dart';
 import 'package:delivery/models/user.dart';
 import 'package:delivery/pages/client/payments/create/client_payments_create_controller.dart';
 import 'package:delivery/utils/my_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_credit_card/credit_card_form.dart';
 import 'package:flutter_credit_card/credit_card_widget.dart';
 
@@ -13,6 +15,16 @@ class ClientPaymentsCreatePage extends StatefulWidget {
 class _ClientPaymentsCreatePageState extends State<ClientPaymentsCreatePage> {
 
   ClientPaymentsCreateController _con = ClientPaymentsCreateController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+      _con.init(context, refresh);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +75,10 @@ class _ClientPaymentsCreatePageState extends State<ClientPaymentsCreatePage> {
               border: OutlineInputBorder(),
               labelText: 'Nombre del titular',
             ),
-            cardNumber: _con.cardNumber,
-            expiryDate: _con.expiryDate,
-            cardHolderName: _con.cardHolderName,
-            cvvCode: _con.cvvCode,
+            cardNumber: '',
+            expiryDate: '',
+            cardHolderName: '',
+            cvvCode: '',
           ),
 
           _documentInfo(),
@@ -77,31 +89,16 @@ class _ClientPaymentsCreatePageState extends State<ClientPaymentsCreatePage> {
     );
   }
 
-  List<DropdownMenuItem<String>> _dropItems (List<User> users){
+  List<DropdownMenuItem<String>> _dropItems (List<MercadoPagoDocumentType> documenTypeList){
     List<DropdownMenuItem<String>> list = [];
-    if(users != null){
-      users.forEach((user) {
+    if(documenTypeList != null){
+      documenTypeList.forEach((document) {
         list.add(DropdownMenuItem(
-          child: Row(
-            children: [
-              Container(
-                height: 40,
-                width: 40,
-                margin: EdgeInsets.only(top: 5, bottom: 5),
-                child: FadeInImage(
-                  image:  user.image != null
-                      ? NetworkImage(user.image!)
-                      : AssetImage('assets/img/no-image.png') as ImageProvider,
-                  fit: BoxFit.cover,
-                  fadeInDuration: Duration(milliseconds: 50),
-                  placeholder: AssetImage('assets/img/no-image.png'),
-                ),
-              ),
-              SizedBox(width: 5,),
-              Text(user.name!),
-            ],
+          child: Container(
+            margin: EdgeInsets.only(top: 7),
+            child: Text(document.name!),
           ),
-          value: user.id,
+          value: document.id,
         ));
       });
     }
@@ -143,12 +140,12 @@ class _ClientPaymentsCreatePageState extends State<ClientPaymentsCreatePage> {
                             color: MyColors.primaryColor,
                           ),
                         ),
-                        items: _dropItems([]),
-                        value: '',
+                        items: _dropItems(_con.documentTypeList!),
+                        value: _con.typeDocument,
                         onChanged: (option) {
                           setState(() {
-                            print('Repartidor seleccionado $option');
-                            //_con.idDelivery = option; // establece el valor seleccionado
+                            print('Documento seleccionado $option');
+                            _con.typeDocument = option!; // establece el valor seleccionado
                           });
                         },
                       ),

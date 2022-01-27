@@ -159,6 +159,7 @@ class _ClientPaymentsCreatePageState extends State<ClientPaymentsCreatePage> {
           Flexible(
             flex: 4,
             child: TextField(
+              controller: _con.documentNumberController,
               keyboardType: TextInputType.phone,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
@@ -176,7 +177,7 @@ class _ClientPaymentsCreatePageState extends State<ClientPaymentsCreatePage> {
     return Container(
       margin: EdgeInsets.all(20),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: _con.createCardToken,
         style: ElevatedButton.styleFrom(
             primary: MyColors.primaryColor,
             padding: EdgeInsets.symmetric(vertical: 5),

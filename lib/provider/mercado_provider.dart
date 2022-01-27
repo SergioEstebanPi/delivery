@@ -40,4 +40,43 @@ class MercadoProvider {
     }
   }
 
+  Future<http.Response?> createCardToken({
+    required String cvv,
+    required String expirationYear,
+    required int expirationMonth,
+    required String cardNumber,
+    required String documentNumber,
+    required String documentId,
+    required String cardHolderName
+  }) async {
+    try{
+      final url = Uri.parse(_urlMercadoPago! + '/v1/card_tokens');
+
+      // identification for Colombia, for Mexico is not required
+      final body = {
+        'securityCode': cvv,
+        'cardExpirationYear': expirationYear,
+        'cardExpirationMonth': expirationMonth,
+        'cardNumber': cardNumber,
+        'cardholderName': {
+          'identification': {
+            'number': documentNumber,
+            'type': documentId
+          },
+          'name': cardHolderName
+        }
+      };
+
+      final res = await http.post(url, headers: {
+        HttpHeaders.authorizationHeader: 'Bearer ${_mercadoPagoCredentials.accessToken}',
+      }, body: json.encode(body));
+
+      return res;
+
+    } catch(e){
+      print('Error $e');
+      return null;
+    }
+  }
+
 }

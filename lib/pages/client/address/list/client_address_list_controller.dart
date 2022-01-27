@@ -38,12 +38,17 @@ class ClientAddressListController {
       idAddress: a.id,
       products: selectedProducts,
     );
-    ResponseApi responseApi = await _ordersProvider.create(order);
+    //ResponseApi responseApi = await _ordersProvider.create(order);
+
+    Navigator.pushNamed(context!, 'client/payments/create');
+
+    /*
     print('Respuesta orden: ${responseApi.toString()}');
     MySnackbar.show(context!, responseApi.message);
     if(responseApi.success){
       MySnackbar.show(context!, 'Se ha creado la orden correctamente');
     }
+     */
 
   }
 

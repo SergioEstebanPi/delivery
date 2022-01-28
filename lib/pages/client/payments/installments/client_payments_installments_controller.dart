@@ -2,6 +2,9 @@ import 'dart:convert';
 
 import 'package:delivery/models/mercado_pago_card_token.dart';
 import 'package:delivery/models/mercado_pago_document_type.dart';
+import 'package:delivery/models/mercado_pago_installment.dart';
+import 'package:delivery/models/mercado_pago_issuer.dart';
+import 'package:delivery/models/mercado_pago_payment_method_installments.dart';
 import 'package:delivery/models/product.dart';
 import 'package:delivery/models/user.dart';
 import 'package:delivery/provider/mercado_provider.dart';
@@ -22,6 +25,10 @@ class ClientPaymentsInstallmentsController {
   MercadoPagoCardToken? mercadoPagoCardToken;
   List<Product> selectedProducts = [];
   double totalPayment = 0;
+  MercadoPagoPaymentMethodInstallments? installments;
+  MercadoPagoIssuer? issuer;
+  List<MercadoPagoInstallment> installmentsList = [];
+  String? selectedInstallment;
 
   Future? init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -40,13 +47,26 @@ class ClientPaymentsInstallmentsController {
 
     _mercadoProvider.init(context, user!);
     getTotalPayment();
-    refresh();
+    getInstallments();
+  }
+
+  void getInstallments() async {
+    installments = (await _mercadoProvider.getInstallments(
+        mercadoPagoCardToken!.firstSixDigits!,
+        totalPayment
+    ));
+
+    print('Installments: ${installments!.toJson()}');
+    installmentsList = installments!.payerCosts;
+    issuer = installments!.issuer;
+    refresh!();
   }
 
   void getTotalPayment(){
     selectedProducts.forEach((p) {
       totalPayment = totalPayment + (p.quantity! * p.price!);
     });
+    refresh!();
   }
 
 }

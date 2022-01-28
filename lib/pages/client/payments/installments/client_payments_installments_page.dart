@@ -1,4 +1,5 @@
 import 'package:delivery/models/mercado_pago_document_type.dart';
+import 'package:delivery/models/mercado_pago_installment.dart';
 import 'package:delivery/models/user.dart';
 import 'package:delivery/pages/client/payments/create/client_payments_create_controller.dart';
 import 'package:delivery/utils/my_colors.dart';
@@ -53,16 +54,16 @@ class _ClientPaymentsInstallmentsPageState extends State<ClientPaymentsInstallme
     );
   }
 
-  List<DropdownMenuItem<String>> _dropItems (List<MercadoPagoDocumentType> documenTypeList){
+  List<DropdownMenuItem<String>> _dropItems (List<MercadoPagoInstallment> installmentsList){
     List<DropdownMenuItem<String>> list = [];
-    if(documenTypeList != null){
-      documenTypeList.forEach((document) {
+    if(installmentsList != null){
+      installmentsList.forEach((installment) {
         list.add(DropdownMenuItem(
           child: Container(
             margin: EdgeInsets.only(top: 7),
-            child: Text(document.name!),
+            child: Text('${installment.installments!}'),
           ),
-          value: document.id,
+          value: '${installment.installments!}',
         ));
       });
     }
@@ -113,12 +114,12 @@ class _ClientPaymentsInstallmentsPageState extends State<ClientPaymentsInstallme
                       color: MyColors.primaryColor,
                     ),
                   ),
-                  items: [],//_dropItems(_con.documentTypeList!),
-                  value: '',//_con.typeDocument,
+                  items: _dropItems(_con.installmentsList),
+                  value: _con.selectedInstallment,
                   onChanged: (option) {
                     setState(() {
-                      print('Documento seleccionado $option');
-                      //_con.typeDocument = option!; // establece el valor seleccionado
+                      print('Cuota seleccionada $option');
+                      _con.selectedInstallment = option!; // establece el valor seleccionado
                     });
                   },
                 ),

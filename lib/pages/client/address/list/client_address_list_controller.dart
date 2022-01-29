@@ -13,7 +13,7 @@ class ClientAddressListController {
 
   BuildContext? context;
   Function? refresh;
-  List<Address> address = [];
+  List<Address> addresses = [];
   AddressProvider _addressProvider = AddressProvider();
   User? user;
   SharedPref _sharedPref = SharedPref();
@@ -26,19 +26,23 @@ class ClientAddressListController {
     user = User.fromJson(await _sharedPref.read('user'));
     _addressProvider.init(context, sessionUser: user);
     _ordersProvider.init(context, sessionUser: user);
+    getAddress();
     refresh();
   }
 
   void createOrder() async {
-    Address a = Address.fromJson(await _sharedPref.read('address') ?? {});
+    /*
+    Address address = Address.fromJson(await _sharedPref.read('address'));
     List<Product> selectedProducts = Product.fromJsonList(await _sharedPref.read('order') ?? []).toList;
 
     Order order = Order(
       idClient: user!.id,
-      idAddress: a.id,
+      idAddress: address.id,
       products: selectedProducts,
     );
     //ResponseApi responseApi = await _ordersProvider.create(order);
+
+     */
 
     Navigator.pushNamed(context!, 'client/payments/create');
 
@@ -54,23 +58,23 @@ class ClientAddressListController {
 
   void handleRadioValueChange(int? value) async {
     radioValue = value ?? 0;
-    _sharedPref.save('address', address[value!]);
+    _sharedPref.save('address', addresses[value!]);
     print('Valor radio: $value');
 
     refresh!();
   }
 
   Future<List<Address>> getAddress() async {
-    address = await _addressProvider.getByUserId(user!.id);
+    addresses = await _addressProvider.getByUserId(user!.id);
 
     Address a = Address.fromJson(await _sharedPref.read('address') ?? {});
-    print('Se guardo la direccion $a');
-    int index = address.indexWhere((ad) => ad.id == a.id);
+    print('Se guardo la direccion ${a.toJson()}');
+    int index = addresses.indexWhere((ad) => ad.id == a.id);
     if(index != -1){
       radioValue = index;
     }
 
-    return address;
+    return addresses;
   }
 
   void goToNewAddress() async {

@@ -59,7 +59,11 @@ class MercadoPagoCustomer {
     metadata                 = json['metadata'];
     defaultCardId            = json['default_card'];
     defaultAddressId         = json['defauilt_address'];
-    customerCardList         = json['cards'];
+    customerCardList         = json['cards'] != null
+        ? List<MercadoPagoCreditCard>.from(json["cards"].map((c) => c is MercadoPagoCreditCard
+        ? c
+        : MercadoPagoCreditCard.fromJsonMap(c)))
+        : []  ;
     liveMode                 = json['live_mode'];
   }
 

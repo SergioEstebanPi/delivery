@@ -113,7 +113,11 @@ class ClientPaymentsCreateController {
         Navigator.pushNamed(
             context!,
             'client/payments/installments',
-            arguments: mercadoPagoCardToken!.toJson()
+            arguments: {
+              'identification_type': typeDocument,
+              'identification_number': documentNumber,
+              'card_token': mercadoPagoCardToken!.toJson()
+            }
         );
         
       } else {

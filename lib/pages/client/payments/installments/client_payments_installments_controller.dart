@@ -104,6 +104,14 @@ class ClientPaymentsInstallmentsController {
         print('Se genero un pago ${response.body}');
         mercadoPagoPayment = MercadoPagoPayment.fromJsonMap(data);
         print('mercado pago gen ${mercadoPagoPayment!.toJson()}');
+
+        Navigator.pushNamedAndRemoveUntil(
+            context!,
+            'client/payments/status',
+                (route) => false,
+          arguments: mercadoPagoPayment!.toJson()
+        );
+
       } else if(response.statusCode == 501){
         MySnackbar.show(context!, data['error']['message']);
         if(data != null && data['error']['status'] == 400){

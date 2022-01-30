@@ -175,7 +175,7 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
       child: ElevatedButton(
         onPressed: _con.createOrder,
         child: Text(
-          'ACEPTAR'
+          'PAGAR'
         ),
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(

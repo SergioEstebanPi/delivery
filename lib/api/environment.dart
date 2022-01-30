@@ -9,4 +9,7 @@ class Environment {
       accessToken: 'YOUR accessToken HERE'
   );
 
+  static const String STRIPE_SECRET = 'YOUR sk KEY HERE';
+  static const String STRIPE_PUBLISHABLEKEY = 'YOUR pk KEY HERE';
+
 }

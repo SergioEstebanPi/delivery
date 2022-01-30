@@ -51,7 +51,17 @@ class _ClientPaymentsStatusPageState extends State<ClientPaymentsStatusPage> {
     return Container(
       width: double.infinity,
       margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-      child:  _con.mercadoPagoPayment != null && _con.mercadoPagoPayment!.status == 'approved' ? Text(
+      child: Text(
+        'Tu orden fue procesada exitosamente usando '
+            '(${_con.brandCard.toUpperCase()}'
+            ') **** ${_con.last4}',
+        style: TextStyle(
+            fontSize: 17
+        ),
+        textAlign: TextAlign.center,
+      )
+      /*
+      _con.mercadoPagoPayment != null && _con.mercadoPagoPayment!.status == 'approved' ? Text(
         'Tu orden fue procesada exitosamente usando '
             '(${_con.mercadoPagoPayment!.paymentMethodId!.toUpperCase()}'
             ') **** ${_con.mercadoPagoPayment!.card!.lastFourDigits}',
@@ -70,6 +80,8 @@ class _ClientPaymentsStatusPageState extends State<ClientPaymentsStatusPage> {
         ),
         textAlign: TextAlign.center,
       ),
+
+       */
     );
   }
 
@@ -104,13 +116,21 @@ class _ClientPaymentsStatusPageState extends State<ClientPaymentsStatusPage> {
         child: SafeArea(
           child: Column(
             children: [
+              Icon(Icons.check_circle, color: Colors.green,size: 150,),
+              /*
               _con.mercadoPagoPayment != null && _con.mercadoPagoPayment!.status == 'approved'
                 ? Icon(Icons.check_circle, color: Colors.green,size: 150,)
                   : Icon(Icons.cancel, color: Colors.red,size: 150,),
+
+               */
               Text(
+                'Gracias por tu compra',
+                /*
                 _con.mercadoPagoPayment != null &&_con.mercadoPagoPayment!.status == 'approved'
                   ? 'Gracias por tu compra'
                       : 'Fallo la transaccion',
+
+                 */
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,

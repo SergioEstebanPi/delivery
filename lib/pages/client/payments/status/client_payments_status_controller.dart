@@ -24,6 +24,8 @@ class ClientPaymentsStatusController {
   Function? refresh;
   MercadoPagoPayment? mercadoPagoPayment;
   String errorMessage = '';
+  String brandCard = '';
+  String last4 = '';
 
   Future? init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -34,12 +36,17 @@ class ClientPaymentsStatusController {
         .settings
         .arguments as Map<String, dynamic>;
 
+    brandCard = arguments['brand'];
+    last4 = arguments['last4'];
+
+    /*
     mercadoPagoPayment = MercadoPagoPayment.fromJsonMap(arguments);
     print('Mercado pago payment: ${mercadoPagoPayment!.toJson()}');
 
     if(mercadoPagoPayment!.status == null || mercadoPagoPayment!.status == 'rejected') {
       createErrorMessage();
     }
+     */
 
     refresh();
   }

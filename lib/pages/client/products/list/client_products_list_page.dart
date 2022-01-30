@@ -65,7 +65,7 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
         body: TabBarView(
           children: _con.categories.map((Category category) {
               return FutureBuilder(
-                  future: _con.getProducts(category.id!),
+                  future: _con.getProducts(category.id!, _con.productName),
                   builder: (context, AsyncSnapshot<List<Product>> snapshot) {
                     if(snapshot.hasData){
                       if(snapshot.data!.length > 0){
@@ -185,6 +185,7 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: TextField(
+        onChanged: _con.onChangeText,
         decoration: InputDecoration(
           hintText: 'Buscar',
           suffixIcon: Icon(

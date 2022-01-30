@@ -50,6 +50,31 @@ class ProductsProvider {
     }
   }
 
+  Future<List<Product>> findByCategoryAndProductName(String idCategory, String productName) async {
+    try{
+      Uri uri = Uri.http(_url, '$_api/findByCategoryAndProductName/$idCategory/$productName');
+      Map<String, String> headers = {
+        'Content-type': 'application/json',
+        'Authorization': sessionUser!.sessionToken!
+      };
+      print("URI $uri");
+      print("headers $headers");
+
+      final res = await http.get(uri, headers: headers);
+      if(res.statusCode == 401){
+        Fluttertoast.showToast(msg: 'Sesion expirada');
+        SharedPref().logout(context!, idUser: sessionUser!.id);
+      }
+
+      final data = json.decode(res.body); // categorias
+      Product product = Product.fromJsonList(data);
+      return product.toList;
+    } catch(error){
+      print('Error $error');
+      return [];
+    }
+  }
+
   Future<Stream?> create(Product product, List<File> images) async {
     try {
       Uri uri = Uri.http(_url, '$_api/create');

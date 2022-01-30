@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:delivery/models/category.dart';
 import 'package:delivery/models/product.dart';
 import 'package:delivery/models/user.dart';
@@ -16,6 +18,8 @@ class ClientProductsListController {
   GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
   User? user;
   Function? refresh;
+  Timer? searchOnStoppedTyping;
+  String productName = '';
 
   CategoriesProvider _categoriesProvider = new CategoriesProvider();
   late List<Category> categories = [];
@@ -32,8 +36,25 @@ class ClientProductsListController {
     refresh();
   }
 
-  Future<List<Product>> getProducts(String idCategory) async {
-    return await _productsProvider.findByCategoryId(idCategory);
+  void onChangeText(String text){
+    Duration duration = Duration(milliseconds: 800);
+    if(searchOnStoppedTyping != null){
+      searchOnStoppedTyping!.cancel();
+      refresh!();
+    }
+    searchOnStoppedTyping = Timer(duration, () {
+      productName = text;
+      refresh!();
+      print('texto completo: $productName');
+    });
+  }
+
+  Future<List<Product>> getProducts(String idCategory, String productName) async {
+    if(productName.isEmpty){
+      return await _productsProvider.findByCategoryId(idCategory);
+    } else {
+      return await _productsProvider.findByCategoryAndProductName(idCategory, productName);
+    }
   }
 
   void getCategories() async {

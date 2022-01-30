@@ -17,15 +17,43 @@ import 'package:delivery/pages/restaurant/categories/create/restaurant_categorie
 import 'package:delivery/pages/restaurant/orders/list/restaurant_orders_list_page.dart';
 import 'package:delivery/pages/restaurant/products/create/restaurant_products_create_page.dart';
 import 'package:delivery/pages/roles/roles_page.dart';
+import 'package:delivery/provider/push_notification_provider.dart';
 import 'package:delivery/utils/my_colors.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+PushNotificationsProvider pushNotificationsProvider = PushNotificationsProvider();
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+  print('Handling a background message ${message.messageId}');
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage((message) => _firebaseMessagingBackgroundHandler(message));
+  pushNotificationsProvider.initNotifications();
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //  inicia a escuchar los cambios de notificaciones
+    pushNotificationsProvider.onMessageListener();
+  }
 
   // This widget is the root of your application.
   @override

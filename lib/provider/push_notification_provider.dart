@@ -1,3 +1,5 @@
+import 'package:delivery/models/user.dart';
+import 'package:delivery/provider/users_provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -67,6 +69,13 @@ class PushNotificationsProvider {
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('A new onMessageOpenedApp event was published!');
     });
+  }
+
+  void saveToken(User user, BuildContext context) async {
+    String? token = await FirebaseMessaging.instance.getToken();
+    UsersProvider usersProvider = UsersProvider();
+    usersProvider.init(context, sessionUser: user);
+    usersProvider.updateNotificationToken(user.id!, token!);
   }
 
 }

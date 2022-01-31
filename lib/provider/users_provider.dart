@@ -161,6 +161,42 @@ class UsersProvider {
     }
   }
 
+  Future<ResponseApi> updateNotificationToken(String idUser, String token) async {
+    try {
+      Uri uri = Uri.http(_url, '$_api/updateNotificationToken');
+      String bodyParams = json.encode({
+        'id': idUser,
+        'notification_token': token
+      });
+      Map<String, String> headers = {
+        'Content-type': 'application/json',
+        'Authorization': sessionUser!.sessionToken!
+      };
+      print("URI $uri");
+      print("bodyParams $bodyParams");
+      print("headers $headers");
+      final res = await http.put(uri, headers: headers, body: bodyParams);
+
+      if(res.statusCode == 401){ // no autorizado
+        Fluttertoast.showToast(msg: 'Tu sesion ha expirado');
+        new SharedPref().logout(context!);
+      }
+
+      final data = json.decode(res.body);
+      ResponseApi responseApi = ResponseApi.fromJson(data);
+      return responseApi;
+    } catch(e) {
+      Map<String, dynamic> res = {
+        "message": "",
+        "error": "Error ${e}",
+        "success": false,
+        "data": null,
+      };
+      ResponseApi responseApi = ResponseApi.fromJson(res);
+      return responseApi;
+    }
+  }
+
   Future<ResponseApi> login(email, password) async {
     try {
       Uri uri = Uri.http(_url, '$_api/login');

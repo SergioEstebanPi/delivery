@@ -1,5 +1,6 @@
 import 'package:delivery/models/response_api.dart';
 import 'package:delivery/models/user.dart';
+import 'package:delivery/provider/push_notification_provider.dart';
 import 'package:delivery/provider/users_provider.dart';
 import 'package:delivery/utils/my_snackbar.dart';
 import 'package:delivery/utils/shared_pref.dart';
@@ -15,19 +16,24 @@ class LoginController {
   UsersProvider usersProvider = UsersProvider();
   SharedPref _sharedPref = SharedPref();
 
+  PushNotificationsProvider pushNotificationsProvider = PushNotificationsProvider();
+
   Future init(BuildContext? context) async {
     this.context = context;
     await usersProvider.init(context);
 
     User user = User.fromJson(await _sharedPref.read('user') ?? {});
     print('Usuario ${user.toJson()}');
-    if(user != null && user.id != null){
+    if(user != null && user.id != null && user.sessionToken != null){
+
+      pushNotificationsProvider.saveToken(user, context!);
+
       if(user.roles != null){
         if(user.roles!.length > 1) {
-          Navigator.pushNamedAndRemoveUntil(context!, 'roles', (route) => false);
+          Navigator.pushNamedAndRemoveUntil(context, 'roles', (route) => false);
         } else {
           String? route = user.roles![0].route;
-          Navigator.pushNamedAndRemoveUntil(context!, route!, (route) => false);
+          Navigator.pushNamedAndRemoveUntil(context, route!, (route) => false);
         }
       }
     }
@@ -59,6 +65,8 @@ class LoginController {
     if(responseApi.success){
       User user = User.fromJson(responseApi.data);
       _sharedPref.save('user', user.toJson());
+
+      pushNotificationsProvider.saveToken(user, context!);
 
       print('Usuario logeado ${user.toJson()}');
       if(user.roles != null){

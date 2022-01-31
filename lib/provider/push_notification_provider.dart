@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:delivery/models/user.dart';
 import 'package:delivery/provider/users_provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:http/http.dart' as http;
 
 class PushNotificationsProvider {
 
@@ -76,6 +79,33 @@ class PushNotificationsProvider {
     UsersProvider usersProvider = UsersProvider();
     usersProvider.init(context, sessionUser: user);
     usersProvider.updateNotificationToken(user.id!, token!);
+  }
+
+  Future<void> sendMessage(
+      String to,
+      Map<String, dynamic> data,
+      String title,
+      String body) async {
+
+    Uri uri = Uri.https('fcm.googleapis.com', '/fcm/send');
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'key=AAAAkVnOtOA:APA91bEjk827bZKsHG0ajzPa6iosPXxumwuYGOEbcewTCNJN8BSvZUPanFtRIlgQcygE5c3noT6lnNKYAnY4H-0XDrYzcBy8b_IakZlQ5undGvN71znGXoxvIn1GtoM4NJ-TkBhcAJEP'
+    };
+    var bodyData = jsonEncode(
+      <String, dynamic> {
+        'notification': <String, dynamic> {
+          'body': body,
+          'title': title
+        },
+        'priority': 'high',
+        'ttl': '4500s',
+        'data': data,
+        'to': to
+      }
+    );
+    await http.post(uri,  headers: headers, body: bodyData);
   }
 
 }

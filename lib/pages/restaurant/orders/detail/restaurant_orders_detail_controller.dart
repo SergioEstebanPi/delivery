@@ -3,6 +3,7 @@ import 'package:delivery/models/product.dart';
 import 'package:delivery/models/response_api.dart';
 import 'package:delivery/models/user.dart';
 import 'package:delivery/provider/orders_provider.dart';
+import 'package:delivery/provider/push_notification_provider.dart';
 import 'package:delivery/provider/users_provider.dart';
 import 'package:delivery/utils/my_snackbar.dart';
 import 'package:delivery/utils/shared_pref.dart';
@@ -23,6 +24,7 @@ class RestaurantOrdersCreateController {
   UsersProvider _usersProvider = UsersProvider();
   String? idDelivery;
   OrdersProvider _ordersProvider = OrdersProvider();
+  PushNotificationsProvider _pushNotificationsProvider = PushNotificationsProvider();
 
   Future? init(BuildContext? context, Function refresh, Order order) async {
     this.context = context;
@@ -36,12 +38,30 @@ class RestaurantOrdersCreateController {
     refresh();
   }
 
+  void sendNotification(String tokenDelivery){
+    Map<String, dynamic> data = {
+      'click_action': 'FLUTTER_NOTIFICATION_CLICK'
+    };
+    _pushNotificationsProvider.sendMessage(
+        tokenDelivery,
+        data,
+        'PEDIDO ASIGNADO',
+        'Te han asignado un pedido'
+    );
+  }
+
   void updateOrder() async {
     if(idDelivery != null){
       order!.idDelivery = idDelivery;
 
       ResponseApi responseApi = await _ordersProvider.updateToDispatched(order!);
       //MySnackbar.show(context!, responseApi.message);
+
+      User? deliveryUser = await _usersProvider.getById(order!.idDelivery!);
+      print('token de notificacion del delivery: ${deliveryUser!.notificationToken!}');
+
+      sendNotification(deliveryUser.notificationToken!);
+
       Fluttertoast.showToast(msg: responseApi.message, toastLength: Toast.LENGTH_LONG);
       Navigator.pop(context!, true);
     } else {

@@ -45,6 +45,28 @@ class UsersProvider {
     }
   }
 
+  Future<List<String>> getAdminsNotificationsTokens() async {
+    try {
+      Uri uri = Uri.http(_url, '$_api/getAdminsNotificationsTokens');
+      Map<String, String> headers = {
+        'Content-type': 'application/json',
+        'Authorization': sessionUser!.sessionToken!
+      };
+      final res = await http.get(uri, headers: headers);
+      if(res.statusCode == 401){ // no autorizado
+        Fluttertoast.showToast(msg: 'Tu sesion ha expirado');
+        new SharedPref().logout(context!);
+      }
+
+      final data = json.decode(res.body);
+      final tokens = List<String>.from(data);
+      return tokens;
+    } catch(e){
+      print('Error $e');
+      return [];
+    }
+  }
+
   Future<List<User>> getDeliveryMen() async {
     try {
       Uri uri = Uri.http(_url, '$_api/findDeliveryMen');

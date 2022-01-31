@@ -162,7 +162,7 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.symmetric(horizontal: 30),
       child: Text(
-          _con.order!.status == 'PAGADO'
+        _con.order != null && _con.order!.status == 'PAGADO'
             ? 'Asignar repartidor'
             : 'Repartidor asignado',
           style: TextStyle(

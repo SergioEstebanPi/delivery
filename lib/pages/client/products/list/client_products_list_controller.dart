@@ -6,6 +6,8 @@ import 'package:delivery/models/user.dart';
 import 'package:delivery/pages/client/products/detail/client_products_detail_page.dart';
 import 'package:delivery/provider/categories_provider.dart';
 import 'package:delivery/provider/products_provider.dart';
+import 'package:delivery/provider/push_notification_provider.dart';
+import 'package:delivery/provider/users_provider.dart';
 import 'package:delivery/utils/my_snackbar.dart';
 import 'package:delivery/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
@@ -20,11 +22,15 @@ class ClientProductsListController {
   Function? refresh;
   Timer? searchOnStoppedTyping;
   String productName = '';
+  PushNotificationsProvider _pushNotificationsProvider = PushNotificationsProvider();
+  UsersProvider _usersProvider = UsersProvider();
 
   CategoriesProvider _categoriesProvider = new CategoriesProvider();
   late List<Category> categories = [];
 
   late ProductsProvider _productsProvider = new ProductsProvider();
+
+  List<String> tokens = [];
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -32,8 +38,34 @@ class ClientProductsListController {
     user = User.fromJson(await _sharedPref.read('user'));
     _categoriesProvider.init(context, sessionUser: user);
     _productsProvider.init(context, sessionUser: user);
+    _usersProvider.init(context, sessionUser: user);
+
+    //tokens = await _usersProvider.getAdminsNotificationsTokens();
+
+    //sendNotification();
     getCategories();
     refresh();
+  }
+
+  void sendNotification(){
+
+    List<String> registration_ids = [];
+
+    tokens.forEach((token) {
+      if(token != null){
+        registration_ids.add(token);
+      }
+    });
+
+    Map<String, dynamic> data = {
+      'click_action': 'FLUTTER_NOTIFICATION_CLICK'
+    };
+    _pushNotificationsProvider.sendMessageMultiple(
+        registration_ids,
+        data,
+        'COMPRA EXITOSA',
+        'Un cliente ha realizado un pedido'
+    );
   }
 
   void onChangeText(String text){

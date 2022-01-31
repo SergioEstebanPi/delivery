@@ -11,6 +11,8 @@ import 'package:delivery/models/order.dart';
 import 'package:delivery/models/product.dart';
 import 'package:delivery/models/user.dart';
 import 'package:delivery/provider/mercado_provider.dart';
+import 'package:delivery/provider/push_notification_provider.dart';
+import 'package:delivery/provider/users_provider.dart';
 import 'package:delivery/utils/my_snackbar.dart';
 import 'package:delivery/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +28,12 @@ class ClientPaymentsStatusController {
   String errorMessage = '';
   String brandCard = '';
   String last4 = '';
+
+  PushNotificationsProvider _pushNotificationsProvider = PushNotificationsProvider();
+  UsersProvider _usersProvider = UsersProvider();
+  List<String> tokens = [];
+  User? user;
+  SharedPref _sharedPref = SharedPref();
 
   Future? init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -48,7 +56,38 @@ class ClientPaymentsStatusController {
     }
      */
 
+    user = User.fromJson(await _sharedPref.read('user'));
+
+    if(mercadoPagoPayment != null && mercadoPagoPayment!.status == null || mercadoPagoPayment!.status == 'rejected') {
+      createErrorMessage();
+    } else {
+      _usersProvider.init(context, sessionUser: user);
+      tokens = await _usersProvider.getAdminsNotificationsTokens();
+      sendNotification();
+    }
+
     refresh();
+  }
+
+  void sendNotification(){
+
+    List<String> registration_ids = [];
+
+    tokens.forEach((token) {
+      if(token != null){
+        registration_ids.add(token);
+      }
+    });
+
+    Map<String, dynamic> data = {
+      'click_action': 'FLUTTER_NOTIFICATION_CLICK'
+    };
+    _pushNotificationsProvider.sendMessageMultiple(
+        registration_ids,
+        data,
+        'COMPRA EXITOSA',
+        'Un cliente ha realizado un pedido'
+    );
   }
 
   void finishShopping(){

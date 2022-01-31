@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:delivery/api/environment.dart';
 import 'package:delivery/models/user.dart';
 import 'package:delivery/provider/users_provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -104,6 +105,33 @@ class PushNotificationsProvider {
         'data': data,
         'to': to
       }
+    );
+    await http.post(uri,  headers: headers, body: bodyData);
+  }
+
+  Future<void> sendMessageMultiple(
+      List<String> toList,
+      Map<String, dynamic> data,
+      String title,
+      String body) async {
+
+    Uri uri = Uri.https('fcm.googleapis.com', '/fcm/send');
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': Environment.FIREBASE_CLOUD_MESSAGING_KEY
+    };
+    var bodyData = jsonEncode(
+        <String, dynamic> {
+          'notification': <String, dynamic> {
+            'body': body,
+            'title': title
+          },
+          'priority': 'high',
+          'ttl': '4500s',
+          'data': data,
+          'registration_ids': toList
+        }
     );
     await http.post(uri,  headers: headers, body: bodyData);
   }

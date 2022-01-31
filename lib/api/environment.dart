@@ -11,5 +11,6 @@ class Environment {
 
   static const String STRIPE_SECRET = 'YOUR sk KEY HERE';
   static const String STRIPE_PUBLISHABLEKEY = 'YOUR pk KEY HERE';
+  static const String FIREBASE_CLOUD_MESSAGING_KEY = 'YOUR firebase cloud messaging key HERE';
 
 }

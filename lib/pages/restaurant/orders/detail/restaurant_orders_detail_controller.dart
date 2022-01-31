@@ -60,7 +60,9 @@ class RestaurantOrdersCreateController {
       User? deliveryUser = await _usersProvider.getById(order!.idDelivery!);
       print('token de notificacion del delivery: ${deliveryUser!.notificationToken!}');
 
-      sendNotification(deliveryUser.notificationToken!);
+      if(deliveryUser.notificationToken != null){
+        sendNotification(deliveryUser.notificationToken!);
+      }
 
       Fluttertoast.showToast(msg: responseApi.message, toastLength: Toast.LENGTH_LONG);
       Navigator.pop(context!, true);

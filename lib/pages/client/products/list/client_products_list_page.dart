@@ -73,7 +73,7 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
                           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              childAspectRatio: 0.7
+                              childAspectRatio: 0.7 // cambia tamaño del card segun distribucion
                           ),
                           itemCount: snapshot.data != null ? snapshot.data!.length : 0,
                           itemBuilder: (_, index) {
@@ -103,79 +103,91 @@ class _ClientProductsListPageState extends State<ClientProductsListPage> {
       onTap: () {
         _con.openBottomSheet(product);
       },
-      child: Container(
-        height: 250,
-        child: Card(
-          color: Colors.white,
-          elevation: 3,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15)
-          ),
-          child: Stack(
-            children: [
-              Positioned(
-                top: -1,
-                right: -1,
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: MyColors.primaryColor,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(15),
-                      topRight: Radius.circular(20)
-                    )
-                  ),
-                  child: Icon(Icons.add, color: Colors.white,),
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 150,
-                    width: MediaQuery.of(context).size.width * 0.45,
-                    padding: EdgeInsets.all(20),
-                    child: FadeInImage(
-                      image: product.image1 != null
-                        ? NetworkImage(product.image1!)
-                        : AssetImage('assets/img/pizza2.png') as ImageProvider,
-                      fit: BoxFit.contain,
-                      fadeInDuration: Duration(milliseconds: 50),
-                      placeholder: AssetImage(
-                        'assets/img/no-image.png'
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    height: 33,
-                    child: Text(
-                      product.name!,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: 'NimbusSans'
-                      ),
-                    ),
-                  ),
-                  Spacer(),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                    child: Text(
-                        '${product.price!}\$',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'NimbusSans'
-                      ),
-                    ),
+      child: Card(
+        color: Colors.white,
+        elevation: 3,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15)
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              top: -1,
+              right: -1,
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: MyColors.primaryColor,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(15),
+                    topRight: Radius.circular(20)
                   )
-                ],
-              )
-            ],
-          ),
+                ),
+                child: Icon(Icons.add, color: Colors.white,),
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Spacer(),
+                Container(
+                  height: 100,
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  padding: EdgeInsets.all(20),
+                  child: FadeInImage(
+                    image: product.image1 != null
+                      ? NetworkImage(product.image1!)
+                      : AssetImage('assets/img/pizza2.png') as ImageProvider,
+                    fit: BoxFit.contain,
+                    fadeInDuration: Duration(milliseconds: 50),
+                    placeholder: AssetImage(
+                      'assets/img/no-image.png'
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  height: 25,
+                  child: Text(
+                    'Restaurante: ' + product.id_user!,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'NimbusSans'
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  height: 25,
+                  child: Text(
+                    product.name!,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontFamily: 'NimbusSans'
+                    ),
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  height: 25,
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  child: Text(
+                      '${product.price!}\$',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'NimbusSans'
+                    ),
+                  ),
+                )
+              ],
+            )
+          ],
         ),
       ),
     );

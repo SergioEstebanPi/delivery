@@ -62,6 +62,7 @@ class _ClientOrdersDetailPageState extends State<ClientOrdersDetailPage> {
                   indent: 30, // margen izquierdo
                 ),
                 SizedBox(height: 10,),
+                //_textData('Restaurante:', _con.order!.idUser!),
                 _textData('Repartidor:', _con.order != null &&_con.order!.delivery!.id != null
                     ? '${_con.order!.delivery!.name} ${_con.order!.delivery!.lastname}'
                     : 'No asignado'),

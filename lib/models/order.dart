@@ -11,6 +11,7 @@ String orderToJson(Order data) => json.encode(data.toJson());
 class Order {
 
   String? id;
+  String? idUser;
   String? idClient;
   String? idDelivery;
   String? idAddress;
@@ -21,11 +22,13 @@ class Order {
   List<Product> products = [];
   List<Order> toList = [];
   User? client;
+  Address? restaurant;
   Address? address;
   User? delivery;
 
   Order({
     this.id,
+    this.idUser,
     this.idClient,
     this.idDelivery,
     this.idAddress,
@@ -35,12 +38,14 @@ class Order {
     this.timestamp,
     required this.products,
     this.client,
+    this.restaurant,
     this.address,
     this.delivery,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
     id: json["id"] is int ? json["id"].toString() : json["id"],
+    idUser: json["id_user"],
     idClient: json["id_client"],
     idDelivery: json["id_delivery"],
     idAddress: json["id_address"],
@@ -63,6 +68,11 @@ class Order {
         : json['address'] is Address
           ? json["address"]
         : Address.fromJson(json["address"] ?? {}),
+    restaurant: json["restaurant"] is String
+        ? addressFromJson(json['restaurant'])
+        : json["restaurant"]  is Address
+        ? json["restaurant"]
+        : Address.fromJson(json["restaurant"] ?? {}),
     delivery: json["delivery"] is String
         ? userFromJson(json['delivery'])
         : json['delivery'] is User
@@ -83,6 +93,7 @@ class Order {
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    "id_user": idUser,
     "id_client": idClient,
     "id_delivery": idDelivery,
     "id_address": idAddress,
@@ -92,6 +103,7 @@ class Order {
     "timestamp": timestamp,
     "products": products,
     "client": client,
+    "restaurant": restaurant,
     "address": address,
     "delivery": delivery,
   };

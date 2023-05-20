@@ -78,7 +78,7 @@ class LoginController {
         }
       }
     } else {
-      MySnackbar.show(context!, responseApi.message);
+      MySnackbar.show(context!, 'Error de conexión con el servidor');
     }
   }
 

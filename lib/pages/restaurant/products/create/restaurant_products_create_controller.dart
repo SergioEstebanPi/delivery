@@ -74,6 +74,7 @@ class RestaurantProductsCreateController {
     }
 
     Product product = Product(
+      id_user: user!.id!,
       name: name,
       description: description,
       price: price,

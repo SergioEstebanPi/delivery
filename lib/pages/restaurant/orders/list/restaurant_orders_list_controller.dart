@@ -33,8 +33,9 @@ class RestaurantOrdersListController {
     refresh();
   }
 
-  Future<List<Order>> getOrders(String status) async {
-    return await _ordersProvider.getByStatus(status);
+  Future<List<Order>> getOrdersByIdAndStatus(String userId, String status) async {
+    //return await _ordersProvider.getByStatus(status);
+    return await _ordersProvider.getByUserIdAndStatus(userId, status);
   }
 
   void openBottomSheet(Order order) async {

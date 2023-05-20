@@ -7,6 +7,7 @@ String productToJson(Product data) => json.encode(data.toJson());
 class Product {
 
   String? id;
+  String? id_user;
   String? name;
   String? description;
   String? image1;
@@ -19,6 +20,7 @@ class Product {
 
   Product({
     this.id,
+    this.id_user,
     this.name,
     this.description,
     this.image1,
@@ -33,6 +35,9 @@ class Product {
     id: json["id"] is int
         ? json["id"].toString()
         : json["id"],
+    id_user: json["id_user"] is int
+        ? json["id_user"].toString()
+        : json["id_user"],
     name: json["name"],
     description: json["description"],
     image1: json["image1"],
@@ -62,6 +67,7 @@ class Product {
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    "id_user": id_user,
     "name": name,
     "description": description,
     "image1": image1,

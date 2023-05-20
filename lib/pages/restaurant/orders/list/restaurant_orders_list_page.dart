@@ -61,7 +61,7 @@ class _RestaurantOrdersListPageState extends State<RestaurantOrdersListPage> {
         body: TabBarView(
           children: _con.categories.map((String category) {
             return FutureBuilder(
-                future: _con.getOrders(category),
+                future: _con.getOrdersByIdAndStatus(_con.user!.id!, category),
                 builder: (context, AsyncSnapshot<List<Order>> snapshot) {
                   if(snapshot.hasData){
                     if(snapshot.data!.length > 0){
@@ -91,13 +91,15 @@ class _RestaurantOrdersListPageState extends State<RestaurantOrdersListPage> {
   }
 
   Widget _cardOrder(Order order){
+    String? fullName = order.delivery!.id == null ? 'No asignado'
+        :order.delivery!.name! + ' ' + order.delivery!.lastname!;
     return GestureDetector(
       onTap: () {
         _con.openBottomSheet(order);
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-        height: 155,
+        height: 300,
         child: Card(
           elevation: 3,
           shape: RoundedRectangleBorder(
@@ -144,6 +146,19 @@ class _RestaurantOrdersListPageState extends State<RestaurantOrdersListPage> {
                         style: TextStyle(
                           fontSize: 13,
                         ),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      width: double.infinity,
+                      child: Text(
+                        'Repartidor: $fullName',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 13,
+                        ),
+                        maxLines: 2,
                       ),
                     ),
                     Container(

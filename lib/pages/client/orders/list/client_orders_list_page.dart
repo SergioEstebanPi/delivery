@@ -114,7 +114,7 @@ class _ClientOrdersListPageState extends State<ClientOrdersListPage> {
                     width: double.infinity,
                     alignment: Alignment.center,
                     child: Text(
-                      'Order #${order.id}',
+                      'Pedido #${order.id}',
                       style: TextStyle(
                           fontSize: 15,
                           color: Colors.white,

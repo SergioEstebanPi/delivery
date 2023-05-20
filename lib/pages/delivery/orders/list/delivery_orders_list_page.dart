@@ -97,7 +97,7 @@ class _DeliveryOrdersListPageState extends State<DeliveryOrdersListPage> {
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-        height: 155,
+        height: 200,
         child: Card(
           elevation: 3,
           shape: RoundedRectangleBorder(
@@ -120,7 +120,7 @@ class _DeliveryOrdersListPageState extends State<DeliveryOrdersListPage> {
                     width: double.infinity,
                     alignment: Alignment.center,
                     child: Text(
-                      'Order #${order.id}',
+                      'Pedido #${order.id}',
                       style: TextStyle(
                           fontSize: 15,
                           color: Colors.white,
@@ -152,6 +152,19 @@ class _DeliveryOrdersListPageState extends State<DeliveryOrdersListPage> {
                       width: double.infinity,
                       child: Text(
                         'Cliente: ${order.client!.name ?? ''} ${order.client!.lastname ?? ''}',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 13,
+                        ),
+                        maxLines: 2,
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      width: double.infinity,
+                      child: Text(
+                        'Recoger en: ${order.restaurant!.address ?? ''}',
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           fontSize: 13,

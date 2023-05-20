@@ -38,10 +38,19 @@ class DeliveryOrdersCreateController {
   void updateOrder() async {
     if(order!.status == 'DESPACHADO'){
       ResponseApi responseApi = await _ordersProvider.updateToOnTheWay(order!);
+      // al volver atras no se ve el estado de la orden actualizado
+      _sharedPref.save('order', order);
       //MySnackbar.show(context!, responseApi.message);
       Fluttertoast.showToast(msg: responseApi.message, toastLength: Toast.LENGTH_LONG);
       if(responseApi.success){
+        Fluttertoast.showToast(msg: 'Orden actualizada a DESPACHADO', toastLength: Toast.LENGTH_LONG);
         Navigator.pushNamed(context!, 'delivery/orders/map', arguments: order!.toJson());
+        refresh!();
+        /*Navigator.pushNamedAndRemoveUntil(
+            context!,
+            'delivery/orders/map', (route) => false,
+            arguments: order!.toJson()
+        );*/
       }
     } else {
       Navigator.pushNamed(context!, 'delivery/orders/map', arguments: order!.toJson());

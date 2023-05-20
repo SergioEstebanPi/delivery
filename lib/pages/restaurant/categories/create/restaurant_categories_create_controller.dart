@@ -42,6 +42,7 @@ class RestaurantCategoriesCreateController {
     _progressDialog!.show(max: 100, msg: 'Cargando...');
 
     Category category = Category(
+      user_id: user?.id,
       name: name,
       description: description
     );

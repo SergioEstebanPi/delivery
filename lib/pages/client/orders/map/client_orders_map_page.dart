@@ -37,7 +37,7 @@ class _ClientOrdersMapPageState extends State<ClientOrdersMapPage> {
       body: Stack(
         children: [
           Container(
-            height: MediaQuery.of(context).size.height * 0.67,
+            height: MediaQuery.of(context).size.height * 0.7,
               child: _googleMaps()
           ),
           SafeArea(

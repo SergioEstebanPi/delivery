@@ -79,7 +79,7 @@ class Order {
         ? addressFromJson(json['store'])
         : json["store"]  is Address
         ? json["store"]
-        : Address.fromJson(json["restaurant"] ?? {}),
+        : Address.fromJson(json["store"] ?? {}),
     delivery: json["delivery"] is String
         ? userFromJson(json['delivery'])
         : json['delivery'] is User

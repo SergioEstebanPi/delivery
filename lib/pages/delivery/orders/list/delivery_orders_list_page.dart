@@ -151,6 +151,19 @@ class _DeliveryOrdersListPageState extends State<DeliveryOrdersListPage> {
                       margin: EdgeInsets.symmetric(vertical: 5),
                       width: double.infinity,
                       child: Text(
+                        'Recoger en: ${order.restaurant!.name!} (${order.store!.address ?? ''})',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 13,
+                        ),
+                        maxLines: 2,
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      width: double.infinity,
+                      child: Text(
                         'Cliente: ${order.client!.name ?? ''} ${order.client!.lastname ?? ''}',
                         textAlign: TextAlign.left,
                         style: TextStyle(
@@ -164,20 +177,7 @@ class _DeliveryOrdersListPageState extends State<DeliveryOrdersListPage> {
                       margin: EdgeInsets.symmetric(vertical: 5),
                       width: double.infinity,
                       child: Text(
-                        'Recoger en: ${order.restaurant!.address ?? ''}',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 13,
-                        ),
-                        maxLines: 2,
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      margin: EdgeInsets.symmetric(vertical: 5),
-                      width: double.infinity,
-                      child: Text(
-                        'Entregar en: ${order.address!.address ?? ''}',
+                        'Entregar en: (${order.address!.address ?? ''})',
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           fontSize: 13,

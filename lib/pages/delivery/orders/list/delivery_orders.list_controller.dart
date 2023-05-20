@@ -21,7 +21,8 @@ class DeliveryOrdersListController {
   List<String> categories = [
     'DESPACHADO',
     'EN CAMINO',
-    'ENTREGADO'
+    'ENTREGADO',
+    'CANCELADO'
   ];
   OrdersProvider _ordersProvider = OrdersProvider();
 

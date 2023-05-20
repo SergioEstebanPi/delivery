@@ -22,7 +22,8 @@ class Order {
   List<Product> products = [];
   List<Order> toList = [];
   User? client;
-  Address? restaurant;
+  User? restaurant;
+  Address? store;
   Address? address;
   User? delivery;
 
@@ -39,6 +40,7 @@ class Order {
     required this.products,
     this.client,
     this.restaurant,
+    this.store,
     this.address,
     this.delivery,
   });
@@ -63,15 +65,20 @@ class Order {
         : json["client"]  is User
           ? json["client"]
           : User.fromJson(json["client"] ?? {}),
+    restaurant: json["restaurant"] is String
+        ? userFromJson(json['restaurant'])
+        : json["restaurant"]  is User
+        ? json["restaurant"]
+        : User.fromJson(json["restaurant"] ?? {}),
     address: json["address"] is String
         ? addressFromJson(json['address'])
         : json['address'] is Address
           ? json["address"]
         : Address.fromJson(json["address"] ?? {}),
-    restaurant: json["restaurant"] is String
-        ? addressFromJson(json['restaurant'])
-        : json["restaurant"]  is Address
-        ? json["restaurant"]
+    store: json["store"] is String
+        ? addressFromJson(json['store'])
+        : json["store"]  is Address
+        ? json["store"]
         : Address.fromJson(json["restaurant"] ?? {}),
     delivery: json["delivery"] is String
         ? userFromJson(json['delivery'])
@@ -104,6 +111,7 @@ class Order {
     "products": products,
     "client": client,
     "restaurant": restaurant,
+    "store": store,
     "address": address,
     "delivery": delivery,
   };

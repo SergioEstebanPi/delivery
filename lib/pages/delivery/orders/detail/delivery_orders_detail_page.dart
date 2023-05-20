@@ -64,6 +64,9 @@ class _DeliveryOrdersDetailPageState extends State<DeliveryOrdersDetailPage> {
                 _textData('Cliente:', _con.order != null
                     ? '${_con.order!.client!.name} ${_con.order!.client!.lastname}'
                     : ''),
+                _textData('Recoger en:', _con.order != null
+                    ? '${_con.order!.store!.address}'
+                    : ''),
                 _textData('Entregar en:', _con.order != null
                     ? '${_con.order!.address!.address}'
                     : ''),

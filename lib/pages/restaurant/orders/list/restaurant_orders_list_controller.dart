@@ -20,7 +20,8 @@ class RestaurantOrdersListController {
     'PAGADO',
     'DESPACHADO',
     'EN CAMINO',
-    'ENTREGADO'
+    'ENTREGADO',
+    'CANCELADO'
   ];
   OrdersProvider _ordersProvider = OrdersProvider();
   bool isUpdated = false;

@@ -75,7 +75,9 @@ class _ClientOrdersDetailPageState extends State<ClientOrdersDetailPage> {
                         ? '${RelativeTimeUtil.getRelativeTime(_con.order!.timestamp ?? 0)}'
                         : ''
                 ),
-                _con.order != null && _con.order!.status == 'EN CAMINO'
+                _con.order != null && _con.order!.status == 'PAGADO'
+                    ? _buttonCancel()
+                    : _con.order != null && _con.order!.status == 'EN CAMINO'
                   ? _buttonNext()
                   : Container(),
               ],
@@ -162,7 +164,7 @@ class _ClientOrdersDetailPageState extends State<ClientOrdersDetailPage> {
     return Container(
       margin: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 20),
       child: ElevatedButton(
-        onPressed: _con.updateOrder,
+        onPressed: _con.showMap,
         style: ElevatedButton.styleFrom(
             primary: Colors.blue,
             padding: EdgeInsets.symmetric(vertical: 5),
@@ -193,6 +195,82 @@ class _ClientOrdersDetailPageState extends State<ClientOrdersDetailPage> {
                 height: 30,
                 child: Icon(
                   Icons.directions_car,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void showAlertDialog(Order order){
+    Widget cancelButton = ElevatedButton(
+      onPressed: () {
+        Navigator.pop(context);
+      },
+      child: Text('NO'),
+    );
+    Widget confirmButton = ElevatedButton(
+      onPressed: () {
+        _con.confirmCancelation(order);
+      },
+      child: Text('SI'),
+    );
+
+    AlertDialog alertDialog = AlertDialog(
+      title: Text('Confirmas que deseas cancelar el pedido?'),
+      actions: [
+        cancelButton,
+        confirmButton
+      ],
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context){
+          return alertDialog;
+        }
+    );
+  }
+
+  Widget _buttonCancel(){
+    return Container(
+      margin: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 20),
+      child: ElevatedButton(
+        onPressed: () {showAlertDialog(_con.order!);},
+        style: ElevatedButton.styleFrom(
+            primary: Colors.blue,
+            padding: EdgeInsets.symmetric(vertical: 5),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12)
+            )
+        ),
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                height: 40,
+                alignment: Alignment.center,
+                child: Text(
+                  'CANCELAR PEDIDO',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                margin: EdgeInsets.only(left: 50, top: 4),
+                height: 30,
+                child: Icon(
+                  Icons.clear,
                   color: Colors.white,
                   size: 30,
                 ),

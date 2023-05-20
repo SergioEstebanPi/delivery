@@ -34,7 +34,7 @@ class ClientOrdersCreateController {
     refresh();
   }
 
-  void updateOrder() {
+  void showMap() {
     Navigator.pushNamed(context!, 'client/orders/map', arguments: order!.toJson());
   }
 
@@ -44,6 +44,20 @@ class ClientOrdersCreateController {
       total = total + (product.price! * product.quantity!);
     });
     refresh!();
+  }
+
+  confirmCancelation(Order? order) async {
+    ResponseApi responseApi = await _ordersProvider.updateToCanceled(order!);
+    if(responseApi.success){
+      Fluttertoast.showToast(msg: 'Pedido cancelado exitosamente', toastLength: Toast.LENGTH_LONG);
+      Navigator.pushNamedAndRemoveUntil(
+          context!,
+          'delivery/orders/list',
+              (route) => false
+      );
+    } else {
+      Fluttertoast.showToast(msg: 'Error al cancelar el pedido', toastLength: Toast.LENGTH_LONG);
+    }
   }
 
 }

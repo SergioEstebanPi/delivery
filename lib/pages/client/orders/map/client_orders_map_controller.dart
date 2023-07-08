@@ -213,7 +213,7 @@ class ClientOrdersMapController {
   void updateLocation() async {
     try {
       await _determinePosition(); // obtener posicion actual y solicitar permisos
-      //_position = await Geolocator.getLastKnownPosition(); // lat y lng
+      _position = await Geolocator.getLastKnownPosition(); // lat y lng
 
       addMarker(
           'delivery',
@@ -240,7 +240,6 @@ class ClientOrdersMapController {
 
       setPolylines(from, to);
 
-      /*
       LocationSettings? locationSettings = LocationSettings(
         accuracy: LocationAccuracy.best,
         distanceFilter: 1
@@ -250,13 +249,21 @@ class ClientOrdersMapController {
       ).listen((Position position) {
         _position = position; // assign the new position
         // move the delivery marker
+        addMarker(
+            'delivery',
+            _position!.latitude,
+            _position!.longitude,
+            'Tu posicion',
+            '',
+            deliveryMarker!
+        );
 
+        animateCameraToPosition(_position!.latitude, _position!.longitude);
         isCloseToDeliveryPosition();
 
         refresh!();
 
       });
-      */
 
       refresh!();
     } catch(e){

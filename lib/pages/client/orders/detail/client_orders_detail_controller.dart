@@ -50,9 +50,10 @@ class ClientOrdersCreateController {
     ResponseApi responseApi = await _ordersProvider.updateToCanceled(order!);
     if(responseApi.success){
       Fluttertoast.showToast(msg: 'Pedido cancelado exitosamente', toastLength: Toast.LENGTH_LONG);
+      refresh!();
       Navigator.pushNamedAndRemoveUntil(
           context!,
-          'delivery/orders/list',
+          'client/orders/list',
               (route) => false
       );
     } else {

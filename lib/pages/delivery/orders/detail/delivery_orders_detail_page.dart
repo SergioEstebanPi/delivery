@@ -77,9 +77,11 @@ class _DeliveryOrdersDetailPageState extends State<DeliveryOrdersDetailPage> {
                         ? '${RelativeTimeUtil.getRelativeTime(_con.order!.timestamp ?? 0)}'
                         : ''
                 ),
-                _con.order != null && _con.order!.status != 'ENTREGADO'
-                  ? _buttonNext()
-                  : Container(),
+                _con.order != null && _con.order!.status == 'DESPACHADO'
+                ? _buttonAccept()
+                  : _con.order != null && _con.order!.status != 'ENTREGADO'
+                    ? _buttonNext()
+                : Container(),
               ],
           ),
         ),
@@ -155,6 +157,56 @@ class _DeliveryOrdersDetailPageState extends State<DeliveryOrdersDetailPage> {
         subtitle: Text(
             content,
           maxLines: 2,
+        ),
+      ),
+    );
+  }
+
+  Widget _buttonAccept(){
+    return Container(
+      margin: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 20),
+      child: ElevatedButton(
+        onPressed: _con.updateOrder,
+        style: ElevatedButton.styleFrom(
+            primary: _con.order!.status == 'DESPACHADO'
+                ? Colors.blue
+                : Colors.green,
+            padding: EdgeInsets.symmetric(vertical: 5),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12)
+            )
+        ),
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                height: 40,
+                alignment: Alignment.center,
+                child: Text(
+                  _con.order!.status == 'DESPACHADO'
+                      ? 'RECOGER PEDIDO'
+                      : 'IR AL MAPA',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                margin: EdgeInsets.only(left: 50, top: 4),
+                height: 30,
+                child: Icon(
+                  Icons.directions_car,
+                  color: Colors.green,
+                  size: 30,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

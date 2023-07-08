@@ -58,7 +58,7 @@ class ClientPaymentsStatusController {
 
     user = User.fromJson(await _sharedPref.read('user'));
 
-    if(mercadoPagoPayment != null && mercadoPagoPayment!.status == null || mercadoPagoPayment!.status == 'rejected') {
+    if(mercadoPagoPayment != null && (mercadoPagoPayment!.status == null || mercadoPagoPayment!.status == 'rejected')) {
       createErrorMessage();
     } else {
       _usersProvider.init(context, sessionUser: user);

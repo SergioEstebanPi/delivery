@@ -242,7 +242,7 @@ class _ClientOrdersDetailPageState extends State<ClientOrdersDetailPage> {
       child: ElevatedButton(
         onPressed: () {showAlertDialog(_con.order!);},
         style: ElevatedButton.styleFrom(
-            primary: Colors.blue,
+            primary: Colors.red,
             padding: EdgeInsets.symmetric(vertical: 5),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12)

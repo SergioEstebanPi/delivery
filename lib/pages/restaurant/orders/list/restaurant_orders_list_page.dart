@@ -78,9 +78,12 @@ class _RestaurantOrdersListPageState extends State<RestaurantOrdersListPage> {
                       );
                     }
                   } else {
-                    return NoDataWidget(
-                        text: "No hay productos"
-                    );
+                    return Container(
+                        margin: EdgeInsets.all(10),
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(
+                        strokeWidth: 5,
+                        valueColor: AlwaysStoppedAnimation(Colors.grey),));
                   }
                 }
             );

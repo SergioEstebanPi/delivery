@@ -84,8 +84,8 @@ class _ClientOrdersMapPageState extends State<ClientOrdersMapPage> {
       mapType: MapType.normal,
       initialCameraPosition: _con.initialPosition,
       onMapCreated: _con.onMapCreated,
-      //myLocationButtonEnabled: true,
-      //myLocationEnabled: true,
+      myLocationButtonEnabled: true,
+      myLocationEnabled: true,
       markers: Set<Marker>.of(_con.markers!.values),
       polylines: _con.polylines,
     );

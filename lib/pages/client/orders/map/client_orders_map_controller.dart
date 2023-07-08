@@ -26,7 +26,7 @@ class ClientOrdersMapController {
   String? addressName;
   LatLng? addressLatLng;
   CameraPosition initialPosition = CameraPosition(
-      target: LatLng(4.6359348,-74.0911402),
+      target: LatLng(4.624335,-74.063644),
       zoom: 14 // 1 - 20
   );
   Completer<GoogleMapController> _mapController = Completer();
@@ -223,7 +223,7 @@ class ClientOrdersMapController {
           '',
           deliveryMarker!
       );
-      animateCameraToPosition(order!.lat!, order!.lng!);
+      //animateCameraToPosition(order!.lat!, order!.lng!);
 
       // home marker
       addMarker(

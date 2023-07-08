@@ -50,7 +50,10 @@ class _ClientOrdersCreatePageState extends State<ClientOrdersCreatePage> {
             return _cardProduct(product);
           }).toList(),
         )
-        : NoDataWidget(text: 'Ningun producto agregado'),
+        : Container(
+        margin: EdgeInsets.all(30),
+        alignment: Alignment.center,
+        child: NoDataWidget(text: 'Ningun producto agregado')),
     );
   }
 

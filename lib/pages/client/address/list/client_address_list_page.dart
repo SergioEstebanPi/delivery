@@ -92,7 +92,7 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
         future: _con.getAddress(),
         builder: (context, AsyncSnapshot<List<Address>> snapshot) {
           if(snapshot.hasData){
-            if(snapshot.data!.length > 0){
+            if(snapshot.data!.isNotEmpty){
               return ListView.builder(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                 itemCount: snapshot.data != null ? snapshot.data!.length : 0,
@@ -104,7 +104,14 @@ class _ClientAddressListPageState extends State<ClientAddressListPage> {
               return _noAddress();
             }
           } else {
-            return _noAddress();
+            return Container(
+              margin: EdgeInsets.all(10),
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(
+                strokeWidth: 5,
+                valueColor: AlwaysStoppedAnimation(Colors.grey),
+              )
+            );
           }
         }
     );

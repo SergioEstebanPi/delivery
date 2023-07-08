@@ -57,8 +57,8 @@ class _ClientOrdersListPageState extends State<ClientOrdersListPage> {
             return FutureBuilder(
                 future: _con.getOrders(category),
                 builder: (context, AsyncSnapshot<List<Order>?> snapshot) {
-                  if(snapshot != null && snapshot.hasData){
-                    if(snapshot.data!.length > 0){
+                  if(snapshot.hasData){
+                    if(snapshot.data!.isNotEmpty){
                       return ListView.builder(
                         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                         itemCount: snapshot.data != null ? snapshot.data!.length : 0,
@@ -72,9 +72,12 @@ class _ClientOrdersListPageState extends State<ClientOrdersListPage> {
                       );
                     }
                   } else {
-                    return NoDataWidget(
-                        text: "No hay productos"
-                    );
+                    return Container(
+                        margin: EdgeInsets.all(10),
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(
+                        strokeWidth: 5,
+                        valueColor: AlwaysStoppedAnimation(Colors.grey),));
                   }
                 }
             );

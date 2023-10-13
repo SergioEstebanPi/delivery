@@ -30,20 +30,6 @@ class _ClientOrdersCreatePageState extends State<ClientOrdersCreatePage> {
       appBar: AppBar(
         title: Text('Mi orden'),
       ),
-      bottomNavigationBar: Container(
-        height: MediaQuery.of(context).size.height * 0.24,
-        child: Column(
-            children: [
-              Divider(
-                color: Colors.grey[400],
-                endIndent: 30, // margen derecho
-                indent: 30, // margen izquierdo
-              ),
-              _textTotalPrice(),
-              _buttonNext(),
-            ],
-        ),
-      ),
       body: _con.selectedProducts.isNotEmpty
         ? ListView(
           children: _con.selectedProducts.map((Product product) {
@@ -53,7 +39,22 @@ class _ClientOrdersCreatePageState extends State<ClientOrdersCreatePage> {
         : Container(
         margin: EdgeInsets.all(30),
         alignment: Alignment.center,
-        child: NoDataWidget(text: 'Ningun producto agregado')),
+        child: NoDataWidget(text: 'Ningún producto agregado')
+      ),
+      bottomNavigationBar: _con.selectedProducts.isNotEmpty ? Container(
+        height: MediaQuery.of(context).size.height * 0.24,
+        child: Column(
+          children: [
+            Divider(
+              color: Colors.grey[400],
+              endIndent: 30, // margen derecho
+              indent: 30, // margen izquierdo
+            ),
+            _textTotalPrice(),
+            _buttonNext(),
+          ],
+        ),
+      ) : Text('Revisa nuestro catalogo de productos'),
     );
   }
 

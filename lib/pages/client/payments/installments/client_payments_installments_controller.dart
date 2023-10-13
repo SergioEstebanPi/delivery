@@ -60,10 +60,22 @@ class ClientPaymentsInstallmentsController {
     identificationNumber = arguments['identification_number'];
 
     print('CARD TOKEN ARGS ${cardToken!.toJson()}');
+    print('CARD TOKEN selectedProducts $selectedProducts');
 
     _mercadoProvider.init(context, user!);
-    getTotalPayment();
-    getInstallments();
+    for (var p in selectedProducts) {
+      totalPayment = totalPayment + (p.quantity! * p.price!);
+    }
+    print('totalPayment $totalPayment');
+    installments = (await _mercadoProvider.getInstallments(
+        cardToken!.firstSixDigits!,
+        totalPayment
+    ));
+
+    print('Installments: ${installments!.toJson()}');
+    installmentsList = installments!.payerCosts;
+    issuer = installments!.issuer;
+    refresh();
   }
 
   void createPay() async {
@@ -95,6 +107,8 @@ class ClientPaymentsInstallmentsController {
       order: order,
     );
 
+    print('Se genero un TOKEN ${response!.body}');
+
     _progressDialog!.close();
 
     if(response != null){
@@ -113,6 +127,7 @@ class ClientPaymentsInstallmentsController {
         );
 
       } else if(response.statusCode == 501){
+        MySnackbar.show(context!, 'error 501');
         MySnackbar.show(context!, data['error']['message']);
         if(data != null && data['error']['status'] == 400){
           badRequestProcess(data);
@@ -180,25 +195,6 @@ class ClientPaymentsInstallmentsController {
     }
     MySnackbar.show(context!, errorMessage!);
     // Navigator.pop(context);
-  }
-
-  void getInstallments() async {
-    installments = (await _mercadoProvider.getInstallments(
-        cardToken!.firstSixDigits!,
-        totalPayment
-    ));
-
-    print('Installments: ${installments!.toJson()}');
-    installmentsList = installments!.payerCosts;
-    issuer = installments!.issuer;
-    refresh!();
-  }
-
-  void getTotalPayment(){
-    selectedProducts.forEach((p) {
-      totalPayment = totalPayment + (p.quantity! * p.price!);
-    });
-    refresh!();
   }
 
 }

@@ -7,6 +7,7 @@ import 'package:delivery/pages/client/orders/map/client_orders_map_page.dart';
 import 'package:delivery/pages/client/payments/create/client_payments_create_page.dart';
 import 'package:delivery/pages/client/payments/installments/client_payments_installments_page.dart';
 import 'package:delivery/pages/client/payments/status/client_payments_status_page.dart';
+import 'package:delivery/pages/client/payments/status/epayco_payments_status_page.dart';
 import 'package:delivery/pages/client/products/list/client_products_list_page.dart';
 import 'package:delivery/pages/client/update/client_update_page.dart';
 import 'package:delivery/pages/delivery/orders/list/delivery_orders_list_page.dart';
@@ -75,6 +76,7 @@ class _MyAppState extends State<MyApp> {
         'client/payments/create': (BuildContext context) => ClientPaymentsCreatePage(),
         'client/payments/installments': (BuildContext context) => ClientPaymentsInstallmentsPage(),
         'client/payments/status': (BuildContext context) => ClientPaymentsStatusPage(),
+        'epayco/payments/status': (BuildContext context) => EpaycoPaymentsStatusPage(),
         'delivery/orders/list': (BuildContext context) => DeliveryOrdersListPage(),
         'delivery/orders/map': (BuildContext context) => DeliveryOrdersMapPage(),
         'restaurant/orders/list': (BuildContext context) => RestaurantOrdersListPage(),

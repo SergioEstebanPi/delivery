@@ -72,10 +72,13 @@ class ClientAddressListController {
       print('Se crearán varias ordenes');
       MySnackbar.show(context!, 'Se crearán varias ordenes');
     } else {
-      print('Se crearán 1 orden');
-      MySnackbar.show(context!, 'Se crearán 1 orden');
+      print('Se creará 1 orden');
+      MySnackbar.show(context!, 'Se creará 1 orden');
     }
 
+    Navigator.pushNamed(context!, 'client/payments/create');
+
+    /*
     grupos.forEach((idUser, productsIdUser) async {
       Order order = Order(
         idUser: idUser,
@@ -83,6 +86,7 @@ class ClientAddressListController {
         idAddress: address.id,
         products: productsIdUser,
       );
+
       ResponseApi responseApi = await _ordersProvider.create(order);
 
       print('Respuesta orden: ${responseApi.toString()}');
@@ -111,6 +115,8 @@ class ClientAddressListController {
         print('ERROR AL CREAR LA ORDEN MSG ' + responseApi.message);
       }
     });
+
+     */
 
 
 

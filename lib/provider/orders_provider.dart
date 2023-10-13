@@ -101,7 +101,7 @@ class OrdersProvider {
   /*
   Future<List<Order>> getByStatus(String status) async {
     try{
-      Uri uri = Uri.http(_url, '$_api/findByStatus/${status}');
+      Uri uri = Uri.https(_url, '$_api/findByStatus/${status}');
       Map<String, String> headers = {
         'Content-type': 'application/json',
         'Authorization': sessionUser!.sessionToken!
@@ -209,6 +209,33 @@ class OrdersProvider {
   Future<ResponseApi> updateToDelivered(Order order) async {
     try {
       Uri uri = Uri.http(_url, '$_api/updateToDelivered');
+      String bodyParams = json.encode(order);
+      Map<String, String> headers = {
+        'Content-type': 'application/json',
+        'Authorization': sessionUser!.sessionToken!
+      };
+      print("URI $uri");
+      print("bodyParams $bodyParams");
+      print("headers $headers");
+      final res = await http.put(uri, headers: headers, body: bodyParams);
+      final data = json.decode(res.body);
+      ResponseApi responseApi = ResponseApi.fromJson(data);
+      return responseApi;
+    } catch(e) {
+      Map<String, dynamic> res = {
+        "message": "",
+        "error": "Error ${e}",
+        "success": false,
+        "data": null,
+      };
+      ResponseApi responseApi = ResponseApi.fromJson(res);
+      return responseApi;
+    }
+  }
+
+  Future<ResponseApi> updateToCanceled(Order order) async {
+    try {
+      Uri uri = Uri.http(_url, '$_api/updateToCanceled');
       String bodyParams = json.encode(order);
       Map<String, String> headers = {
         'Content-type': 'application/json',

@@ -135,23 +135,24 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
       margin: EdgeInsets.symmetric(horizontal: 30,),
       child: Row(
         children: [
-          Container(
-            height: 40,
-            width: 40,
-            margin: EdgeInsets.only(top: 5, bottom: 5),
-            child: FadeInImage(
-              image:  _con.order!.delivery!.image != null
-                  ? NetworkImage(_con.order!.delivery!.image!)
-                  : AssetImage('assets/img/no-image.png') as ImageProvider,
-              fit: BoxFit.cover,
-              fadeInDuration: Duration(milliseconds: 50),
-              placeholder: AssetImage('assets/img/no-image.png'),
+            Container(
+              height: 40,
+              width: 40,
+              margin: EdgeInsets.only(top: 5, bottom: 5),
+              child: FadeInImage(
+                image:  _con.order!.delivery!.image != null
+                    ? NetworkImage(_con.order!.delivery!.image!)
+                    : AssetImage('assets/img/no-image.png') as ImageProvider,
+                fit: BoxFit.cover,
+                fadeInDuration: Duration(milliseconds: 50),
+                placeholder: AssetImage('assets/img/no-image.png'),
+              ),
             ),
-          ),
-          SizedBox(width: 5,),
-          Text(
-              '${_con.order!.delivery!.name!} ${_con.order!.delivery!.lastname!}'
-          ),
+            SizedBox(width: 5,),
+          _con.order!.delivery!.id != null ?
+            Text(
+                '${_con.order!.delivery!.name} ${_con.order!.delivery!.lastname}'
+            ) : Text("Sin asignar")
         ],
       ),
     );
@@ -163,8 +164,8 @@ class _RestaurantOrdersDetailPageState extends State<RestaurantOrdersDetailPage>
       margin: EdgeInsets.symmetric(horizontal: 30),
       child: Text(
         _con.order != null && _con.order!.status == 'PAGADO'
-            ? 'Asignar repartidor'
-            : 'Repartidor asignado',
+            ? 'Asignar repartidor' :  _con.order!.delivery!.id != null
+            ? 'Repartidor asignado' : 'Repartidor NO asignado',
           style: TextStyle(
             fontSize: 16,
             fontStyle: FontStyle.italic,

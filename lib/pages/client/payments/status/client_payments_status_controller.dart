@@ -44,8 +44,8 @@ class ClientPaymentsStatusController {
         .settings
         .arguments as Map<String, dynamic>;
 
-    brandCard = arguments['brand'];
-    last4 = arguments['last4'];
+    brandCard = arguments['brand'] ?? '';
+    last4 = arguments['last4'] ?? '';
 
     /*
     mercadoPagoPayment = MercadoPagoPayment.fromJsonMap(arguments);
